@@ -1,114 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jay | Cybersecurity & MalDev</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jay — Professional Portfolio</title>
+  <meta name="description" content="Comprehensive professional portfolio of Jay — cybersecurity, malware research, blockchain, CTFs, network engineering, and academic research." />
   <style>
-    body {
-      background-color: #0a0a0a;
-      color: #00ff99;
-      font-family: "Courier New", monospace;
-      margin: 0;
-      padding: 0;
+    /* Dark terminal aesthetic, no JavaScript, single-file deployable */
+    :root{
+      --bg:#050505; --text:#c8ffd1; --accent:#00ff99; --muted:#6b6b6b; --card:#0d0d0d;
+      --mono: 'Courier New', monospace;
+      --maxw:1100px;
     }
-    header {
-      padding: 2rem;
-      text-align: center;
-      border-bottom: 2px solid #00ff99;
-    }
-    h1 {
-      font-size: 2.5rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    section {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h2 {
-      border-left: 4px solid #00ff99;
-      padding-left: 10px;
-      text-transform: uppercase;
-      margin-top: 2rem;
-    }
-    p, li {
-      line-height: 1.6;
-    }
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    li::before {
-      content: "> ";
-      color: #00ff99;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      border-top: 2px solid #00ff99;
-      margin-top: 2rem;
-      font-size: 0.9rem;
-    }
-    a {
-      color: #00ff99;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+    *{box-sizing:border-box}
+    body{background:linear-gradient(180deg,#020202 0%, #060606 100%);color:var(--text);font-family:var(--mono);margin:0;padding:0}
+    .wrap{max-width:var(--maxw);margin:32px auto;padding:28px}
+    header{display:flex;gap:20px;align-items:center;border-bottom:1px solid rgba(0,255,153,0.06);padding-bottom:18px}
+    .brand{flex:1}
+    h1{margin:0;font-size:32px;letter-spacing:2px}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:6px}
+    nav{display:flex;gap:12px;align-items:center}
+    .pill{border:1px solid rgba(0,255,153,0.08);padding:6px 10px;border-radius:8px;font-size:13px;color:var(--accent);text-decoration:none}
+
+    section{margin-top:28px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:10px;padding:20px}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+    .card{background:var(--card);padding:14px;border-radius:8px;border:1px solid rgba(0,255,153,0.03)}
+    h2{margin:0 0 12px 0;color:var(--accent);font-size:16px}
+    p{color:var(--text);line-height:1.45;margin:8px 0}
+    ul{padding-left:16px}
+    li{margin:6px 0}
+    .muted{color:var(--muted);font-size:13px}
+    .tag{display:inline-block;padding:4px 8px;border-radius:6px;border:1px solid rgba(0,255,153,0.06);font-size:12px;margin:4px 6px 4px 0}
+    .projects-list li{margin:14px 0}
+    pre{background:#020202;border-left:3px solid var(--accent);padding:12px;color:var(--text);overflow:auto;border-radius:6px}
+    .timeline{font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    footer{margin-top:22px;padding:12px;border-top:1px solid rgba(0,255,153,0.04);text-align:center;color:var(--muted)}
+    a{color:var(--accent)}
+    .contact a{display:block;margin:6px 0}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    /* Responsive */
+    @media(max-width:900px){.grid{grid-template-columns:1fr} .brand{display:block} nav{display:none}}
   </style>
 </head>
 <body>
-  <header>
-    <h1>Jay / 0xMalDev</h1>
-    <p>Cybersecurity | Malware Development | Blockchain | Quantum Cryptography</p>
-  </header>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Jay — 0xMalDev</h1>
+        <div class="subtitle">Cybersecurity researcher · Malware analyst · Blockchain & Quantum cryptography · Network operator</div>
+      </div>
+      <nav>
+        <a class="pill" href="#about">About</a>
+        <a class="pill" href="#projects">Projects</a>
+        <a class="pill" href="#research">Research</a>
+        <a class="pill" href="#ctfs">CTFs</a>
+        <a class="pill" href="#contact">Contact</a>
+      </nav>
+    </header>
 
-  <section>
-    <h2>About Me</h2>
-    <p>
-      I’m Jay — cybersecurity practitioner, CTF player, and dark web researcher.  
-      My focus lies in <b>malware development, reverse engineering, blockchain security, quantum cryptography</b>, and building systems where anonymity and resilience come first.  
-      I move between academia and the underground, balancing research papers with real-world attack surface exploration.  
-    </p>
+    <!-- Core summary and quick facts -->
+    <section id="about" class="card">
+      <h2>About — professional scope</h2>
+      <p>
+        I compile every single professional artifact and contribution here — projects, research, CTFs, tools, papers and platform-level engineering. This repository is the canonical record of my work: offensive & defensive research, secure-by-design systems, and privacy-first protocols.
+      </p>
+      <div class="two-col">
+        <div>
+          <p class="small"><strong>Location</strong>: India</p>
+          <p class="small"><strong>Primary OS</strong>: Arch Linux</p>
+          <p class="small"><strong>Roles</strong>: Cybersecurity engineer, researcher, team lead</p>
+        </div>
+        <div>
+          <p class="small"><strong>Interests</strong>: Malware analysis, cryptography, blockchain, CTFs, network security</p>
+          <p class="small"><strong>Contact</strong>: Replace the links in the Contact section below</p>
+        </div>
+      </div>
+    </section>
 
-    <h2>Projects</h2>
-    <ul>
-      <li><b>Blockchain-Based Secure Drone Logistics:</b> Private blockchain for autonomous drone tracking and logistics.</li>
-      <li><b>Security Compliance Platform:</b> HIPAA-focused compliance tool with malware scanning, SIEM, and quantum crypto.</li>
-      <li><b>D-Anon:</b> De-anonymization research tool for analyzing obfuscated darknet traffic.</li>
-      <li><b>Tor-Only Chat Protocol:</b> Experimental protocol for anonymous, encrypted communications.</li>
-      <li><b>Ransomware PoC:</b> Research into polymorphic & metamorphic payloads for evasion analysis.</li>
-    </ul>
+    <div class="grid">
+      <main>
+        <!-- Projects -->
+        <section id="projects" class="card">
+          <h2>Projects — complete archive</h2>
+          <p class="small">Every project below corresponds to active work, research, or prototypes I've built. Each item links (where available) to repos, docs, or papers. Replace <code>/* LINK */</code> placeholders with actual URLs in the repo.</p>
 
-    <h2>Skills</h2>
-    <ul>
-      <li>Penetration Testing & VAPT</li>
-      <li>Malware Development & Reverse Engineering</li>
-      <li>Blockchain & Smart Contract Security</li>
-      <li>Quantum Cryptography Research</li>
-      <li>Network Administration & Security Monitoring</li>
-    </ul>
+          <ul class="projects-list">
+            <li>
+              <strong>Security Compliance Platform (Enterprise)</strong>
+              <div class="muted">On-premises HIPAA compliance platform; continuous monitoring, EDR, SIEM integration, quantum-enhanced encryption.</div>
+              <ul>
+                <li>Modules: File scanning (VirusTotal-like), Sandbox execution, YARA-based static analysis, ClamAV integration, AI-based detection.</li>
+                <li>Design notes: Zero Trust, UEBA, automated compliance reporting, audit-readiness pipelines.</li>
+              </ul>
+            </li>
 
-    <h2>Research</h2>
-    <ul>
-      <li>Designing Ethical Simulations for Ransomware Negotiation using Smart Contracts</li>
-      <li>Polymorphic & Metamorphic Ransomware Payloads</li>
-      <li>Decentralized Privacy-Preserving Biometrics for Web3 & Blockchain</li>
-    </ul>
+            <li>
+              <strong>VirusTotal-like Malware Scanner (Module)</strong>
+              <div class="muted">Single-file scanning service integrated into the compliance platform.</div>
+              <ul>
+                <li>Features: Static & dynamic analysis, sandbox orchestration (VM/container), signature + ML detection, YARA rule management.</li>
+                <li>Saved artifacts: analysis reports, timeline of behaviors, network indicators.</li>
+              </ul>
+            </li>
 
-    <h2>Contact</h2>
-    <p>
-      GitHub: <a href="https://github.com/YOUR_USERNAME">github.com/YOUR_USERNAME</a><br>
-      LinkedIn: <a href="https://linkedin.com/in/YOUR_USERNAME">linkedin.com/in/YOUR_USERNAME</a><br>
-      Secure Contact: <a href="mailto:YOUR_EMAIL">PGP Mail</a>
-    </p>
-  </section>
+            <li>
+              <strong>Blockchain-Based Secure Drone Logistics Network</strong>
+              <div class="muted">Private blockchain storing drone registration & telemetry. DB: <code>drones_blockchain.db</code>.</div>
+              <ul>
+                <li>Components: P2P network, on-chain drone events, tracking map integration, decrypt.py to fetch current location of drones.</li>
+                <li>Dashboard notes: Minimal input for registering drones; map shows location & current activity when called.</li>
+              </ul>
+            </li>
 
-  <footer>
-    <p>© 2025 Jay | Crafted in the shadows.</p>
-  </footer>
+            <li>
+              <strong>Tor-Only Chat Protocol</strong>
+              <div class="muted">Design + prototype for anonymous, onion-routed chat using Tor for all transport.</div>
+              <ul>
+                <li>Goals: metadata minimization, perfect forward secrecy, protocol-level anonymity assumptions.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>D-Anon</strong>
+              <div class="muted">De-anonymization research tool for traffic analysis (research-only, ethics-first).</div>
+              <ul>
+                <li>Use: trace correlation techniques, traffic fingerprinting, ethical disclosure workflows.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Ransomware Research & PoC (Academic)</strong>
+              <div class="muted">Polymorphic & metamorphic payload research for evasion analysis and defensive measures (academic/ethical use).</div>
+              <ul>
+                <li>Paper: mutation-based ransomware for evasion studies. Lab: CTF-style simulator of negotiation using smart contracts.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Real-time System Scanner (VirusTotal-like for Hosts)</strong>
+              <div class="muted">Python backend that scans open ports, monitors services, logs to SQLite every 10s, sandbox incoming files.</div>
+              <ul>
+                <li>Frontend: planned Raylib GUI in C that displays backend terminal output in real-time.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Forensic & RE Challenges</strong>
+              <div class="muted">Multiple CTF reverse engineering and PCAPNG forensic challenges.</div>
+              <ul>
+                <li>Examples: APK reverse engineering challenge; pathfinding + RC4-style final flag decryptor.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Tooling & Utilities</strong>
+              <ul>
+                <li>IP/Network scanning tools, automation scripts (Ansible, Python), monitoring dashboards, PiGuard (access control logging & unknown device detection).</li>
+                <li>PiGuard Sector 2 implemented in Python with SQLite logs and periodic detection intervals.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Academic & Research Projects</strong>
+              <div class="muted">Multiple papers and presentations.</div>
+              <ul>
+                <li>"Designing Ethical Simulations for Ransomware Negotiation using Smart Contracts" — simulation & ethical analysis.</li>
+                <li>"Designing and Analyzing Polymorphic & Metamorphic Ransomware Payloads" — mutation-based evasion research.</li>
+                <li>"Decentralized Privacy-Preserving Biometrics for Web3 & Blockchain" — AES quantum-enhanced cryptography + Tor communications.</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Other Notable Works</strong>
+              <ul>
+                <li>ANIMUS-like visual login page inspired UI (advanced variant) for a cyber project.</li>
+                <li>Tor + blockchain real-time cyber threat monitoring dashboard (hackathon project).</li>
+              </ul>
+            </li>
+
+          </ul>
+        </section>
+
+        <!-- Research -->
+        <section id="research" class="card">
+          <h2>Research — papers, talks & notes</h2>
+          <p class="small">Canonical list of research and preprints. Replace the placeholders with DOIs or downloadable PDFs when available.</p>
+          <ol class="timeline">
+            <li><strong>Designing Ethical Simulations for Ransomware Negotiation using Smart Contracts</strong> — simulated negotiation, ethical analysis, CTF-style simulator. (2025)</li>
+            <li><strong>Polymorphic & Metamorphic Ransomware Payloads</strong> — deep-dive, mutation-based evasion strategies and defenses. (2025)</li>
+            <li><strong>Decentralized Privacy-Preserving Biometrics for Web3 & Blockchain</strong> — decentralized storage, AES quantum-enhanced cryptography, Tor for networking. (2025)</li>
+            <li><strong>Other notes:</strong> quantum cryptographic algorithm draft (Qiskit), and de-anonymization methodologies.</li>
+          </ol>
+        </section>
+
+        <!-- CTFs and Competitions -->
+        <section id="ctfs" class="card">
+          <h2>CTFs, Cyberthons & Competitions</h2>
+          <p class="small">Active competitor — many boxes, challenges, and writeups. Key categories:</p>
+          <ul>
+            <li>Forensics (PCAP/PCAPNG analysis)</li>
+            <li>Reverse engineering (APKs, PE analysis, shellcode)</li>
+            <li>Offensive challenges: privilege escalation, container/dockers escape</li>
+            <li>Defensive: incident response, threat hunting</li>
+          </ul>
+        </section>
+
+        <!-- Teaching / Mentoring / Workshops -->
+        <section class="card">
+          <h2>Teaching, Mentoring & Community</h2>
+          <p class="small">Mentorship in CTF teams and workshops on malware analysis, network security, and blockchain privacy.</p>
+          <ul>
+            <li>Organized internal lab sessions on static/dynamic analysis and YARA.</li>
+            <li>Guided a team building a private blockchain for drone logistics; assigned roles and reviews.</li>
+          </ul>
+        </section>
+
+      </main>
+
+      <aside>
+        <!-- Sidebar: Skills, Timeline, Quick links -->
+        <section class="card">
+          <h2>Skills & Tools</h2>
+          <div class="tag">Malware Analysis</div>
+          <div class="tag">Reverse Engineering</div>
+          <div class="tag">Network Security</div>
+          <div class="tag">Blockchain</div>
+          <div class="tag">Quantum Crypto</div>
+          <div class="tag">Python / C / Shell</div>
+          <div style="margin-top:10px">
+            <p class="small">Tools: Wireshark, Ghidra, IDA, NASM, QEMU, Docker, GIT, Ansible, ClamAV, YARA, TensorFlow/PyTorch (for heuristic detectors).</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Professional Timeline</h2>
+          <div class="timeline small">
+            <p><strong>2025</strong> — Active research on ransomware simulations, quantum crypto drafts, drone blockchain prototype.</p>
+            <p><strong>2024</strong> — PiGuard Prototyping, real-time scanner backend; multiple CTFs and RE challenges.</p>
+            <p><strong>2023 & earlier</strong> — CTFs, coursework (Sri Ramakrishna Engineering College), community contributions.</p>
+          </div>
+        </section>
+
+        <section class="card contact" id="contact">
+          <h2>Contact & Repos</h2>
+          <p class="small">Canonical links — replace <code>YOUR_USERNAME</code> with your handles.</p>
+          <a href="https://github.com/YOUR_USERNAME">GitHub — github.com/YOUR_USERNAME</a>
+          <a href="https://linkedin.com/in/YOUR_USERNAME">LinkedIn — linkedin.com/in/YOUR_USERNAME</a>
+          <a href="mailto:YOUR_EMAIL">Email — YOUR_EMAIL (PGP available)</a>
+          <a href="#">Resume (download) — ./assets/Jay_Resume.pdf</a>
+          <p class="small">Onion/Tor contact (optional): <code>replace-with-onion-address.onion</code></p>
+        </section>
+
+        <section class="card">
+          <h2>Deployment</h2>
+          <p class="small">This single HTML file is ready to drop into a GitHub Pages repo. Create a new public repo named <code>username.github.io</code> or any repo and enable Pages from <code>main / root</code>. Commit this file as <code>index.html</code>.</p>
+        </section>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="small">This page is a living record — update links to repos, papers, and assets as they become available. Built with a terminal-first aesthetic; no JavaScript, no tracking.</div>
+    </footer>
+  </div>
 </body>
 </html>
