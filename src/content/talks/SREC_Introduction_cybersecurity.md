@@ -6,9 +6,9 @@ event: "0xArchive SREC Cyber Seminar"
 location: "Sri Ramakrishna Engineering College, Coimbatore"
 linkedin: "https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_i-had-the-opportunity-to-deliver-a-session-activity-7369476012042108930-phcv"
 images:
-  - "/images/srec.jpg"
-  - "/images/srec2.jpg"
-  - "/images/srec3.jpg"
+  - "/images/talks/srec.jpg"
+  - "/images/talks/srec2.jpg"
+  - "/images/talks/srec3.jpg"
 tags: ["Zero Trust", "Network Security", "Cybersecurity", "Foundations"]
 featured: true
 ---
