@@ -1,97 +1,125 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Gallery reads images directly from the public/images/ folder.
-// Add images to public/images/gallery/ and they'll appear here automatically
-// when you list them in this frontmatter or a JSON/markdown config file.
-//
-// For a fully automatic approach, populate gallery-index.json:
-// public/gallery-index.json → [{ "src": "/images/gallery/photo.jpg", "alt": "...", "caption": "..." }]
-// Then fetch it here.
+interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
 
-// Default: import from a JSON config file in public/
-let images: Array<{ src: string; alt: string; caption?: string }> = [];
+let images: GalleryImage[] = [];
 try {
-  // During build, attempt to load gallery index.
-  // To add images: edit public/gallery-index.json
-  const response = await fetch(new URL('/gallery-index.json', Astro.site ?? 'http://localhost:4321').toString()).catch(() => null);
-  if (response?.ok) {
-    images = await response.json();
-  }
+  const res = await fetch(
+    new URL('/gallery-index.json', Astro.site ?? 'http://localhost:4321').toString()
+  ).catch(() => null);
+  if (res?.ok) images = await res.json();
 } catch { /* no gallery index yet */ }
+
+const siteUrl = (Astro.site ?? 'http://localhost:4321').toString().replace(/\/$/, '');
+
+// JSON-LD structured data for Google image indexing
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": "Jashwanth Raghav — Photo Gallery",
+  "description": "Photos of Jashwanth Raghav at cybersecurity competitions, conference talks, hackathons, and community events.",
+  "author": {
+    "@type": "Person",
+    "name": "Jashwanth Raghav",
+    "url": siteUrl,
+    "sameAs": [
+      "https://www.linkedin.com/in/jashwanth-raghav-5a9111313/",
+      "https://github.com/z3rodayhacks"
+    ]
+  },
+  "image": images.map(img => ({
+    "@type": "ImageObject",
+    "contentUrl": `${siteUrl}${img.src}`,
+    "name": img.alt,
+    "description": img.caption ?? img.alt,
+    "author": {
+      "@type": "Person",
+      "name": "Jashwanth Raghav"
+    }
+  }))
+};
 ---
 
-<BaseLayout title="Gallery — Cybersecurity Portfolio" description="Photos from conferences, talks, hackathons, and security events.">
+<BaseLayout
+  title="Gallery — Jashwanth Raghav | Cybersecurity Competitions & Talks"
+  description="Photos of Jashwanth Raghav at cybersecurity competitions, hackathons, conference talks, and community events across India."
+>
+  <!-- Structured data for Google image indexing -->
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
   <div class="py-16 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto">
 
       <div class="mb-12">
-        <p class="section-label mb-3">Visual</p>
+        <p class="section-label mb-3">Photos</p>
         <h1 class="text-4xl font-bold text-zinc-100 mb-4">Gallery</h1>
         <p class="text-zinc-400 max-w-xl">
-          Snapshots from conferences, hackathons, community events, and workshops.
-        </p>
-        <p class="mt-3 text-xs font-mono text-zinc-700">
-          Add images to <code class="bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">public/images/gallery/</code>
-          and list them in <code class="bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">public/gallery-index.json</code>
+          Moments from hackathons, CTF competitions, conference talks, and community events.
         </p>
       </div>
 
       {images.length === 0 ? (
         <div class="text-center py-20 border border-dashed border-zinc-800 rounded-lg">
-          <svg class="w-12 h-12 mx-auto mb-4 text-zinc-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-          <p class="font-mono text-zinc-600 text-sm">No images yet</p>
-          <p class="text-zinc-700 text-xs mt-2">
-            Create <code class="font-mono">public/gallery-index.json</code> with an array of image objects
-          </p>
-          <div class="mt-6 max-w-md mx-auto text-left">
-            <pre class="terminal p-4 text-xs text-zinc-400 overflow-x-auto"><code>{`// public/gallery-index.json
-[
-  {
-    "src": "/images/gallery/defcon-2024.jpg",
-    "alt": "DEF CON 2024",
-    "caption": "Speaking at DEF CON 32"
-  }
-]`}</code></pre>
-          </div>
+          <p class="font-mono text-zinc-600 text-sm">No images yet.</p>
+          <p class="text-zinc-700 text-xs mt-2">Add entries to <code class="font-mono">public/gallery-index.json</code></p>
         </div>
       ) : (
         <>
-          <!-- Masonry grid via CSS columns -->
+          <p class="text-xs text-zinc-700 font-mono mb-8">{images.length} photos</p>
+
+          <!-- Masonry grid -->
           <div class="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3" id="gallery-grid">
             {images.map((img, i) => (
               <div
                 class="break-inside-avoid overflow-hidden rounded-lg border border-zinc-800 cursor-zoom-in group"
-                data-lightbox={img.src}
+                data-src={img.src}
                 data-caption={img.caption ?? img.alt}
                 tabindex="0"
                 role="button"
-                aria-label={`View full size: ${img.alt}`}
+                aria-label={`View: ${img.alt}`}
               >
                 <img
                   src={img.src}
                   alt={img.alt}
-                  loading={i < 6 ? 'eager' : 'lazy'}
+                  loading={i < 8 ? 'eager' : 'lazy'}
                   decoding="async"
-                  class="w-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                  width="400"
+                  height="300"
+                  class="w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-90"
+                  itemprop="image"
                 />
                 {img.caption && (
-                  <p class="px-3 py-2 text-xs text-zinc-500 font-mono">{img.caption}</p>
+                  <p class="px-3 py-2 text-xs text-zinc-500 font-mono leading-snug">{img.caption}</p>
                 )}
               </div>
             ))}
           </div>
 
           <!-- Lightbox -->
-          <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/92 backdrop-blur p-4" role="dialog" aria-modal="true" aria-label="Image lightbox">
-            <button id="lb-close" class="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full bg-zinc-800/80" aria-label="Close lightbox">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+            role="dialog" aria-modal="true" aria-label="Photo lightbox">
+            <button id="lb-close" aria-label="Close"
+              class="absolute top-4 right-4 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all z-10">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
             </button>
-            <img id="lb-img" src="" alt="" class="max-w-full max-h-[85vh] rounded-lg object-contain" />
-            <p id="lb-caption" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-sm text-zinc-400 font-mono bg-black/60 px-4 py-1.5 rounded-full"></p>
+            <button id="lb-prev" aria-label="Previous"
+              class="absolute left-3 sm:left-6 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all z-10">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="max-w-5xl w-full flex flex-col items-center gap-3 px-14">
+              <img id="lb-img" src="" alt="" class="max-h-[82vh] max-w-full object-contain rounded-lg select-none" />
+              <p id="lb-caption" class="text-sm text-zinc-400 font-mono text-center"></p>
+            </div>
+            <button id="lb-next" aria-label="Next"
+              class="absolute right-3 sm:right-6 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all z-10">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div id="lb-counter" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs font-mono text-zinc-600 bg-zinc-900/80 px-3 py-1 rounded-full"></div>
           </div>
         </>
       )}
@@ -100,32 +128,51 @@ try {
 </BaseLayout>
 
 <script>
-  const items = document.querySelectorAll('[data-lightbox]');
-  const lb    = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lb-img') as HTMLImageElement | null;
-  const lbCap = document.getElementById('lb-caption');
-  const close = document.getElementById('lb-close');
+  const items = Array.from(document.querySelectorAll('[data-src]'));
+  const lb      = document.getElementById('lightbox')!;
+  const lbImg   = document.getElementById('lb-img') as HTMLImageElement;
+  const lbCap   = document.getElementById('lb-caption')!;
+  const lbCount = document.getElementById('lb-counter')!;
+  let cur = 0;
 
-  const open  = (src: string, cap: string) => {
-    if (!lb || !lbImg || !lbCap) return;
-    lbImg.src = src; lbCap.textContent = cap;
-    lb.classList.remove('hidden');
-    lb.classList.add('flex');
+  function show(i: number) {
+    cur = (i + items.length) % items.length;
+    const el = items[cur];
+    lbImg.src = el.getAttribute('data-src')!;
+    lbImg.alt = el.getAttribute('aria-label') ?? '';
+    lbCap.textContent = el.getAttribute('data-caption') ?? '';
+    lbCount.textContent = `${cur + 1} / ${items.length}`;
+  }
+
+  function open(i: number) {
+    lb.classList.remove('hidden'); lb.classList.add('flex');
     document.body.style.overflow = 'hidden';
-  };
-  const closeBox = () => {
-    lb?.classList.add('hidden');
-    lb?.classList.remove('flex');
+    show(i);
+  }
+  function close() {
+    lb.classList.add('hidden'); lb.classList.remove('flex');
     document.body.style.overflow = '';
-  };
+  }
 
-  items.forEach((el) => {
-    const handler = () => open(el.getAttribute('data-lightbox') ?? '', el.getAttribute('data-caption') ?? '');
-    el.addEventListener('click', handler);
-    el.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter') handler(); });
+  items.forEach((el, i) => {
+    el.addEventListener('click', () => open(i));
+    el.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter') open(i); });
   });
 
-  close?.addEventListener('click', closeBox);
-  lb?.addEventListener('click', (e) => { if (e.target === lb) closeBox(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBox(); });
+  document.getElementById('lb-close')!.addEventListener('click', close);
+  document.getElementById('lb-prev')!.addEventListener('click', () => show(cur - 1));
+  document.getElementById('lb-next')!.addEventListener('click', () => show(cur + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  document.addEventListener('keydown', e => {
+    if (lb.classList.contains('hidden')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  let tx = 0;
+  lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  lb.addEventListener('touchend', e => {
+    const d = tx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 50) show(d > 0 ? cur + 1 : cur - 1);
+  });
 </script>

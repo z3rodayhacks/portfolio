@@ -1,5 +1,5 @@
 ---
-title: SRM Cyber Carnival — Cyberthon 2025
+title: SRM Cyber Carnival - Cyberthon 2025
 description: My team 0xZ3RODAY emerged as WINNERS of Cyberthon 2025, conducted by
   SRM Institute of Science and Technology, Ramapuram Campus, Chennai, Tamil Nadu,
   on 1st–2nd February 2025.
@@ -14,12 +14,11 @@ project: TOR-Unveil
 github: https://github.com/z3rodayhacks/D-Anon1
 linkedin: https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_cyberthon2025-cybersecurity-srm-activity-7292221803404427266-NkFm
 thumbnail: /images/competitions/SRM.jpg
-images: []
 tags:
-  - cybersecurity
-  - tor
-  - hackathon
-  - winner
+- cybersecurity
+- tor
+- hackathon
+- winner
 featured: true
 ---
 

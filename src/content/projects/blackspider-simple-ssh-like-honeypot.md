@@ -1,5 +1,5 @@
 ---
-title: BlackSpider — Simple SSH-like Honeypot
+title: BlackSpider - Simple SSH-like Honeypot
 description: BlackSpider is a lightweight, async SSH-like honeypot written in Python.
   It offers a fake SSH banner and shell, captures attacker input, stores structured
   events in SQLite and JSON-lines, and is engineered to be ML-ready with command event
@@ -10,14 +10,14 @@ category: Research
 github: https://github.com/z3rodayhacks/SSH-HONEYPOT-DOCKER
 thumbnail: /images/projects/honey.png
 techStack:
-  - Python
-  - Docker
-  - SQLite
+- Python
+- Docker
+- SQLite
 tags:
-  - cybersecurity
-  - soc
-  - honeypot
-  - blue-team
+- cybersecurity
+- soc
+- honeypot
+- blue-team
 featured: true
 ---
 
