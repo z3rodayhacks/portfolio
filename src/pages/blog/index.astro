@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, allTags, formatDate, readingTime } from '../../lib/utils';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sorted   = sortByDate(allPosts);
+const tags     = allTags(allPosts);
+
+const { searchParams } = Astro.url;
+const activeTag = searchParams.get('tag') ?? undefined;
+const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTag)) : sorted;
+---
+
+<BaseLayout title="Blog — Cybersecurity Portfolio" description="Security research articles, tutorials, vulnerability writeups, and CTF solutions.">
+  <div class="py-16 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+
+      <div class="mb-12">
+        <p class="section-label mb-3">Writing</p>
+        <h1 class="text-4xl font-bold text-zinc-100 mb-4">Blog</h1>
+        <p class="text-zinc-400 max-w-xl">
+          Security research, CTF writeups, tool guides, and thoughts on the industry.
+        </p>
+      </div>
+
+      <!-- Tag filter -->
+      {tags.length > 0 && (
+        <div class="mb-8 flex flex-wrap gap-2">
+          <a href="/blog" class={`tag ${!activeTag ? 'active' : ''}`}>All</a>
+          {tags.map((tag) => (
+            <a href={`/blog?tag=${encodeURIComponent(tag)}`} class={`tag ${activeTag === tag ? 'active' : ''}`}>
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <p class="text-xs text-zinc-600 font-mono mb-6">{filtered.length} post{filtered.length !== 1 ? 's' : ''}</p>
+
+      {filtered.length === 0 ? (
+        <div class="text-center py-20 text-zinc-600 font-mono">
+          No posts found for tag "{activeTag}".
+          <a href="/blog" class="block mt-4 text-emerald-400">Clear filter</a>
+        </div>
+      ) : (
+        <div class="flex flex-col gap-4">
+          {filtered.map((post) => (
+            <a href={`/blog/${post.id}`}
+              class="group p-5 bg-zinc-900/40 border border-zinc-800 rounded-lg card-hover flex flex-col sm:flex-row gap-5">
+              {post.data.thumbnail && (
+                <div class="sm:w-40 h-32 sm:h-28 shrink-0 rounded overflow-hidden bg-zinc-900">
+                  <img src={post.data.thumbnail} alt={post.data.title} loading="lazy" decoding="async"
+                    class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                </div>
+              )}
+              <div class="flex-1 flex flex-col justify-between min-w-0">
+                <div>
+                  <div class="flex items-center gap-3 text-xs text-zinc-600 font-mono mb-2">
+                    <time datetime={post.data.date}>{formatDate(post.data.date, { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                    <span class="text-zinc-700">·</span>
+                    <span>{readingTime(post.body ?? '')} min read</span>
+                  </div>
+                  <h2 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-snug mb-2">
+                    {post.data.title}
+                  </h2>
+                  <p class="text-sm text-zinc-500 leading-relaxed line-clamp-2">{post.data.description}</p>
+                </div>
+                {post.data.tags.length > 0 && (
+                  <div class="mt-3 flex flex-wrap gap-1.5">
+                    {post.data.tags.slice(0, 4).map((tag) => <span class="tag">{tag}</span>)}
+                  </div>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>

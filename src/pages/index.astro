@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import FeaturedProjects from '../components/home/FeaturedProjects.astro';
+import LatestPosts from '../components/home/LatestPosts.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate } from '../lib/utils';
+
+const allProjects = await getCollection('projects');
+const allPosts    = await getCollection('blog', ({ data }) => !data.draft);
+
+const featuredProjects = sortByDate(allProjects.filter((p) => p.data.featured)).slice(0, 3);
+const latestPosts      = sortByDate(allPosts).slice(0, 3);
+
+const displayProjects = featuredProjects.length > 0
+  ? featuredProjects
+  : sortByDate(allProjects).slice(0, 3);
+---
+
+<BaseLayout
+  title="Cybersecurity Portfolio — Researcher & Engineer"
+  description="Cybersecurity professional specialising in penetration testing, security research, and building secure systems."
+>
+  <Hero />
+  {displayProjects.length > 0 && <FeaturedProjects projects={displayProjects} />}
+  {latestPosts.length > 0     && <LatestPosts posts={latestPosts} />}
+
+  <!-- Certificates teaser -->
+  <section class="py-16 px-4 sm:px-6 border-t border-zinc-800/40">
+    <div class="max-w-7xl mx-auto text-center">
+      <p class="section-label mb-3">Credentials</p>
+      <h2 class="text-xl font-bold text-zinc-100 mb-2">Certifications & Achievements</h2>
+      <p class="text-zinc-500 text-sm mb-6">Industry-recognised security certifications and course completions.</p>
+      <a href="/certificates"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-emerald-500/40 text-zinc-300 hover:text-emerald-400 rounded text-sm font-medium transition-all">
+        View All Certificates →
+      </a>
+    </div>
+  </section>
+</BaseLayout>

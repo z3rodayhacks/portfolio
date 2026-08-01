@@ -1,0 +1,109 @@
+---
+// Hero section — terminal aesthetic, no neon overkill
+---
+
+<section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden grid-bg">
+  <!-- Radial gradient overlay (very subtle) -->
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_50%,rgba(34,197,94,0.05)_0%,transparent_65%)] pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-24">
+
+    <!-- Terminal prompt line -->
+    <div class="terminal inline-flex mb-10 animate-fade-up">
+      <div class="terminal-bar gap-1.5">
+        <span class="terminal-dot bg-red-500/70"></span>
+        <span class="terminal-dot bg-yellow-500/70"></span>
+        <span class="terminal-dot bg-emerald-500/70"></span>
+        <span class="ml-2 text-zinc-500 font-mono text-xs">~/sec-portfolio  —  bash</span>
+      </div>
+      <div class="px-4 py-3 font-mono text-sm text-zinc-400">
+        <span class="text-emerald-400">➜</span>
+        <span class="text-zinc-500 ml-2">~</span>
+        <span class="text-zinc-100 ml-2">whoami</span>
+      </div>
+    </div>
+
+    <!-- Name -->
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mb-4 animate-fade-up-1">
+      <span class="text-zinc-100">Your</span>
+      <span class="text-emerald-400"> Name</span>
+    </h1>
+
+    <!-- Role -->
+    <div class="text-xl sm:text-2xl font-mono text-zinc-400 mb-6 animate-fade-up-2" aria-label="Role">
+      <span id="role-text">Cybersecurity Engineer</span><span class="cursor-blink text-emerald-400 ml-0.5">_</span>
+    </div>
+
+    <!-- Description -->
+    <p class="max-w-2xl text-base sm:text-lg text-zinc-400 leading-relaxed mb-10 animate-fade-up-3">
+      I research vulnerabilities, build secure systems, and share knowledge
+      through <a href="/talks" class="text-emerald-400 hover:text-emerald-300 transition-colors">talks</a> and
+      <a href="/blog" class="text-emerald-400 hover:text-emerald-300 transition-colors">writing</a>.
+      Currently focused on offensive security, threat modeling, and building
+      tools that help defenders.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap items-center gap-3 animate-fade-up-4">
+      <a href="/projects"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold rounded text-sm transition-all duration-200 hover:shadow-[0_0_20px_rgba(34,197,94,0.25)]">
+        View Projects
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="/about"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-zinc-100 font-medium rounded text-sm transition-all duration-200">
+        About Me
+      </a>
+      <a href="/blog"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-800 hover:border-zinc-700 text-zinc-500 hover:text-zinc-300 font-medium rounded text-sm transition-all duration-200">
+        Read Blog
+      </a>
+    </div>
+
+    <!-- Stat pills -->
+    <div class="mt-14 flex flex-wrap gap-3 animate-fade-up-4">
+      {[
+        { label: 'Projects', value: '20+' },
+        { label: 'CVEs Found', value: '5' },
+        { label: 'Blog Posts', value: '30+' },
+        { label: 'Conference Talks', value: '8' },
+      ].map(({ label, value }) => (
+        <div class="flex items-center gap-2.5 px-4 py-2 bg-zinc-900/60 border border-zinc-800 rounded-full text-sm">
+          <span class="text-emerald-400 font-bold font-mono">{value}</span>
+          <span class="text-zinc-500">{label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-zinc-600" aria-hidden="true">
+    <span class="text-xs font-mono tracking-widest uppercase">scroll</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-bounce">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>
+
+<script>
+  // Simple role typewriter
+  const roles = [
+    'Cybersecurity Engineer',
+    'Penetration Tester',
+    'Security Researcher',
+    'CTF Player',
+    'Bug Hunter',
+  ];
+  const el = document.getElementById('role-text');
+  if (el) {
+    let i = 0, j = 0, deleting = false;
+    const tick = () => {
+      const current = roles[i % roles.length];
+      el.textContent = deleting ? current.slice(0, j--) : current.slice(0, j++);
+      if (!deleting && j > current.length) { deleting = true; setTimeout(tick, 2000); return; }
+      if (deleting && j < 0) { deleting = false; i++; j = 0; setTimeout(tick, 400); return; }
+      setTimeout(tick, deleting ? 50 : 90);
+    };
+    setTimeout(tick, 1200);
+  }
+</script>

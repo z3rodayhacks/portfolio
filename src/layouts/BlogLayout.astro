@@ -1,0 +1,69 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate, readingTime } from '../lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  thumbnail?: string;
+  body?: string;
+}
+
+const { title, description, date, tags, thumbnail, body = '' } = Astro.props;
+const mins = readingTime(body);
+---
+
+<BaseLayout title={`${title} — Blog`} description={description} image={thumbnail} type="article">
+  <article class="py-16 px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="mb-8 font-mono text-xs text-zinc-600" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-emerald-400 transition-colors">Home</a>
+        <span class="mx-2 text-zinc-700">/</span>
+        <a href="/blog" class="hover:text-emerald-400 transition-colors">Blog</a>
+        <span class="mx-2 text-zinc-700">/</span>
+        <span class="text-zinc-500 truncate max-w-[20ch] inline-block align-bottom">{title}</span>
+      </nav>
+
+      <!-- Header -->
+      <header class="mb-12">
+        <div class="flex flex-wrap gap-2 mb-4">
+          {tags.map((tag) => <span class="tag green">{tag}</span>)}
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold text-zinc-100 leading-tight mb-4">{title}</h1>
+        <p class="text-base text-zinc-400 leading-relaxed mb-6">{description}</p>
+        <div class="flex items-center gap-4 text-sm text-zinc-600 font-mono">
+          <time datetime={date}>{formatDate(date)}</time>
+          <span class="text-zinc-700">·</span>
+          <span>{mins} min read</span>
+        </div>
+      </header>
+
+      {thumbnail && (
+        <img src={thumbnail} alt={title} loading="eager" decoding="async"
+          class="w-full rounded-lg mb-10 object-cover h-64 sm:h-80 border border-zinc-800" />
+      )}
+
+      <!-- Article body -->
+      <div class="prose prose-invert prose-lg max-w-none">
+        <slot />
+      </div>
+
+      <!-- Footer nav -->
+      <div class="mt-16 pt-8 border-t border-zinc-800 flex items-center justify-between">
+        <a href="/blog" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-emerald-400 transition-colors font-mono">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          Back to Blog
+        </a>
+        <div class="flex flex-wrap gap-2">
+          {tags.slice(0, 3).map((tag) => <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="tag">{tag}</a>)}
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

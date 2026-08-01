@@ -1,0 +1,137 @@
+---
+const navLinks = [
+  { href: '/',             label: 'Home' },
+  { href: '/about',        label: 'About' },
+  { href: '/projects',     label: 'Projects' },
+  { href: '/blog',         label: 'Blog' },
+  { href: '/talks',        label: 'Talks' },
+  { href: '/certificates', label: 'Certs' },
+  { href: '/timeline',     label: 'Timeline' },
+  { href: '/contact',      label: 'Contact' },
+];
+
+const { pathname } = Astro.url;
+const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 transition-all duration-300"
+  style="border-bottom: 1px solid transparent; background: transparent;"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+    <!-- Logo -->
+    <a href="/" class="shrink-0 flex items-center gap-2 font-mono font-bold text-base">
+      <span class="text-zinc-500">/</span><span class="text-emerald-400">sec</span><span class="text-zinc-500">~</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          aria-current={isActive(href) ? 'page' : undefined}
+          class={`px-3 py-1.5 rounded text-sm transition-colors whitespace-nowrap ${
+            isActive(href)
+              ? 'text-emerald-400 bg-emerald-500/8'
+              : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
+          }`}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-1">
+      <a
+        href="/search"
+        class="p-2 rounded text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800/60 transition-colors"
+        aria-label="Search"
+        title="Search"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </a>
+
+      <a
+        href="/resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded border border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/8 hover:border-emerald-500/40 transition-all font-mono"
+      >
+        resume<span class="text-zinc-500">↗</span>
+      </a>
+
+      <!-- Mobile toggle -->
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden p-2 rounded text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800/60 transition-colors"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+      >
+        <svg id="icon-open" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg id="icon-close" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="hidden" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="hidden lg:hidden border-t border-zinc-800/60 bg-[#050505]/98"
+    aria-label="Mobile navigation"
+  >
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-0.5">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          aria-current={isActive(href) ? 'page' : undefined}
+          class={`px-3 py-2 rounded text-sm transition-colors ${
+            isActive(href)
+              ? 'text-emerald-400 bg-emerald-500/8'
+              : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
+          }`}
+        >
+          {label}
+        </a>
+      ))}
+      <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
+        class="mt-1 px-3 py-2 text-sm font-mono font-semibold text-emerald-400 border border-emerald-500/25 rounded hover:bg-emerald-500/8 transition-all w-full text-center">
+        resume ↗
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Scroll → header background
+  const header = document.getElementById('site-header');
+  const updateHeader = () => {
+    if (!header) return;
+    const scrolled = window.scrollY > 20;
+    header.style.background = scrolled ? 'rgba(5,5,5,0.92)' : 'transparent';
+    header.style.backdropFilter = scrolled ? 'blur(16px)' : 'none';
+    header.style.borderBottomColor = scrolled ? '#1c1c1c' : 'transparent';
+  };
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+
+  // Mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  btn?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  });
+</script>

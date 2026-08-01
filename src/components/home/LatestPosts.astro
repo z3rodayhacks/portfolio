@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, readingTime } from '../../lib/utils';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+const { posts } = Astro.props;
+---
+
+<section class="py-20 px-4 sm:px-6 border-t border-zinc-800/40">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <p class="section-label mb-2">From the blog</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-zinc-100">Latest Articles</h2>
+      </div>
+      <a href="/blog" class="hidden sm:flex items-center gap-1.5 text-sm text-zinc-500 hover:text-emerald-400 transition-colors font-mono">
+        all posts →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {posts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          class="group flex flex-col bg-zinc-900/40 border border-zinc-800 rounded-lg p-5 card-hover"
+        >
+          <!-- Date + reading time -->
+          <div class="flex items-center justify-between text-xs text-zinc-600 font-mono mb-3">
+            <time datetime={post.data.date}>{formatDate(post.data.date, { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+            <span>{readingTime(post.body ?? '')} min read</span>
+          </div>
+
+          <!-- Title -->
+          <h3 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-snug mb-2">
+            {post.data.title}
+          </h3>
+
+          <!-- Excerpt -->
+          <p class="text-sm text-zinc-500 leading-relaxed flex-1 mb-4">
+            {post.data.description}
+          </p>
+
+          <!-- Tags -->
+          {post.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-1.5">
+              {post.data.tags.slice(0, 3).map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-8 sm:hidden text-center">
+      <a href="/blog" class="text-sm text-zinc-500 hover:text-emerald-400 transition-colors font-mono">
+        view all posts →
+      </a>
+    </div>
+  </div>
+</section>

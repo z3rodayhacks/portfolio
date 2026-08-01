@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, allTags, formatDate } from '../lib/utils';
+
+const allCerts = await getCollection('certificates');
+const sorted   = sortByDate(allCerts);
+const tags     = allTags(allCerts);
+
+const { searchParams } = Astro.url;
+const activeTag = searchParams.get('tag') ?? undefined;
+const filtered  = activeTag ? sorted.filter((c) => c.data.tags.includes(activeTag)) : sorted;
+---
+
+<BaseLayout title="Certificates — Cybersecurity Portfolio" description="Professional certifications, courses, and credentials in cybersecurity.">
+  <div class="py-16 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="mb-12">
+        <p class="section-label mb-3">Credentials</p>
+        <h1 class="text-4xl font-bold text-zinc-100 mb-4">Certificates</h1>
+        <p class="text-zinc-400 max-w-xl">
+          Industry certifications, professional training, and completed security courses.
+        </p>
+      </div>
+
+      {tags.length > 0 && (
+        <div class="mb-8 flex flex-wrap gap-2">
+          <a href="/certificates" class={`tag ${!activeTag ? 'active' : ''}`}>All</a>
+          {tags.map((tag) => (
+            <a href={`/certificates?tag=${encodeURIComponent(tag)}`} class={`tag ${activeTag === tag ? 'active' : ''}`}>{tag}</a>
+          ))}
+        </div>
+      )}
+
+      {filtered.length === 0 ? (
+        <div class="text-center py-20">
+          <p class="font-mono text-zinc-600">No certificates added yet.</p>
+          <p class="text-zinc-700 text-sm mt-2">Add <code class="font-mono text-xs bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">src/content/certificates/*.md</code> files.</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filtered.map((cert) => (
+            <div class="flex flex-col bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
+              {cert.data.thumbnail ? (
+                <div class="h-36 overflow-hidden bg-zinc-900">
+                  <img src={cert.data.thumbnail} alt={cert.data.title} loading="lazy" decoding="async"
+                    class="w-full h-full object-contain p-3 opacity-90" />
+                </div>
+              ) : (
+                <div class="h-36 bg-zinc-900/80 flex items-center justify-center">
+                  <div class="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" aria-hidden="true">
+                      <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/>
+                    </svg>
+                  </div>
+                </div>
+              )}
+              <div class="p-4 flex-1 flex flex-col">
+                <h2 class="font-semibold text-sm text-zinc-100 leading-snug mb-1">{cert.data.title}</h2>
+                <p class="text-emerald-400 text-xs font-mono mb-3">{cert.data.issuer}</p>
+                {cert.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1 mb-3">
+                    {cert.data.tags.slice(0, 3).map((tag) => <span class="tag">{tag}</span>)}
+                  </div>
+                )}
+                <div class="mt-auto pt-3 border-t border-zinc-800 flex items-center justify-between">
+                  <time class="text-xs text-zinc-600 font-mono" datetime={cert.data.date}>
+                    {formatDate(cert.data.date, { year: 'numeric', month: 'short' })}
+                  </time>
+                  {cert.data.credentialUrl && (
+                    <a href={cert.data.credentialUrl} target="_blank" rel="noopener noreferrer"
+                      class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-mono">
+                      verify ↗
+                    </a>
+                  )}
+                </div>
+                {cert.data.credentialId && (
+                  <p class="mt-1 text-xs text-zinc-700 font-mono truncate" title={cert.data.credentialId}>
+                    {cert.data.credentialId}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>

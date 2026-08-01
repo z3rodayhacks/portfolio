@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, formatDate } from '../lib/utils';
+
+const experience  = await getCollection('experience');
+const sortedExp   = experience.sort((a, b) => b.data.order - a.data.order);
+const allCerts    = await getCollection('certificates');
+
+const skills = {
+  'Offensive Security': ['Penetration Testing', 'Red Teaming', 'Exploit Development', 'CTF', 'OSINT'],
+  'Defensive Security': ['Threat Modeling', 'Incident Response', 'SIEM', 'IDS/IPS', 'DFIR'],
+  'Cloud & DevSecOps':  ['AWS Security', 'Azure Security', 'Docker', 'Kubernetes', 'CI/CD Security'],
+  'Development':        ['Python', 'Go', 'Bash', 'JavaScript', 'Rust'],
+};
+---
+
+<BaseLayout title="About — Cybersecurity Portfolio" description="Learn more about my background, skills, experience, and approach to security.">
+  <div class="py-16 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-16 animate-fade-up">
+        <p class="section-label mb-3">About me</p>
+        <h1 class="text-4xl font-bold text-zinc-100 mb-6">Background & Experience</h1>
+        <div class="flex flex-col sm:flex-row gap-8 items-start">
+          <div class="sm:w-40 shrink-0">
+            <div class="w-full aspect-square sm:w-40 sm:h-40 rounded-lg overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+              <img src="/profile/photo.jpg" alt="Profile photo" loading="eager"
+                class="w-full h-full object-cover"
+                onerror="this.parentElement.innerHTML='<span class=\'font-mono text-4xl text-emerald-500\'>YN</span>'"
+              />
+            </div>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold text-zinc-100 mb-1">Your Name</h2>
+            <p class="text-emerald-400 font-mono text-sm mb-4">Cybersecurity Engineer / Researcher</p>
+            <p class="text-zinc-400 leading-relaxed mb-4">
+              I'm a cybersecurity professional with a focus on offensive security and research.
+              I find vulnerabilities, build tools that help defenders, and share what I learn
+              through talks, blog posts, and open-source projects.
+            </p>
+            <p class="text-zinc-500 leading-relaxed">
+              When I'm not hacking things, I'm competing in CTFs, contributing to open-source
+              security projects, or mentoring the next generation of security professionals.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="/resume.pdf" target="_blank"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold rounded text-sm transition-all">
+                Download CV ↓
+              </a>
+              <a href="/contact"
+                class="inline-flex items-center gap-2 px-4 py-2 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white rounded text-sm font-medium transition-all">
+                Get in Touch
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <section class="mb-16" aria-labelledby="skills-heading">
+        <p class="section-label mb-3">Technical expertise</p>
+        <h2 id="skills-heading" class="text-2xl font-bold text-zinc-100 mb-8">Skills & Tools</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {Object.entries(skills).map(([category, items]) => (
+            <div class="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+              <h3 class="font-mono text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-3">{category}</h3>
+              <div class="flex flex-wrap gap-2">
+                {items.map((skill) => (
+                  <span class="px-2.5 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded text-xs text-zinc-300 font-mono">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Experience -->
+      {sortedExp.length > 0 && (
+        <section class="mb-16" aria-labelledby="exp-heading">
+          <p class="section-label mb-3">Career</p>
+          <h2 id="exp-heading" class="text-2xl font-bold text-zinc-100 mb-8">Work Experience</h2>
+          <div class="flex flex-col gap-4">
+            {sortedExp.map((job) => (
+              <div class="p-5 bg-zinc-900/40 border border-zinc-800 rounded-lg">
+                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
+                  <div>
+                    <h3 class="font-semibold text-zinc-100">{job.data.title}</h3>
+                    <p class="text-emerald-400 text-sm">{job.data.company}</p>
+                  </div>
+                  <div class="text-xs font-mono text-zinc-600 shrink-0 text-left sm:text-right">
+                    <div>{formatDate(job.data.startDate, { year: 'numeric', month: 'short' })} — {job.data.current ? <span class="text-emerald-400">Present</span> : formatDate(job.data.endDate ?? job.data.startDate, { year: 'numeric', month: 'short' })}</div>
+                    {job.data.location && <div>{job.data.location}</div>}
+                  </div>
+                </div>
+                <p class="text-sm text-zinc-500">{job.data.description}</p>
+                {job.data.tags.length > 0 && (
+                  <div class="mt-3 flex flex-wrap gap-1.5">
+                    {job.data.tags.map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- CTA -->
+      <div class="p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-lg text-center">
+        <p class="text-zinc-300 mb-4">Interested in working together or learning more about my work?</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/contact" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold rounded text-sm transition-all">
+            Contact Me
+          </a>
+          <a href="/projects" class="px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 rounded text-sm font-medium transition-all">
+            View Projects
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

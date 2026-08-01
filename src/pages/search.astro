@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate, readingTime } from '../lib/utils';
+
+// Build a search index at build time — static JSON served from the same page
+const projects = await getCollection('projects');
+const posts    = await getCollection('blog', ({ data }) => !data.draft);
+const talks    = await getCollection('talks');
+const certs    = await getCollection('certificates');
+
+const searchIndex = [
+  ...projects.map((p) => ({
+    type: 'project',
+    id:   p.id,
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    date: p.data.date,
+    url: `/projects/${p.id}`,
+  })),
+  ...posts.map((p) => ({
+    type: 'blog',
+    id:   p.id,
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    date: p.data.date,
+    url: `/blog/${p.id}`,
+    readingTime: readingTime(p.body ?? ''),
+  })),
+  ...talks.map((t) => ({
+    type: 'talk',
+    id:   t.id,
+    title: t.data.title,
+    description: t.data.description,
+    tags: t.data.tags,
+    date: t.data.date,
+    url: `/talks`,
+  })),
+  ...certs.map((c) => ({
+    type: 'certificate',
+    id:   c.id,
+    title: c.data.title,
+    description: `${c.data.issuer}`,
+    tags: c.data.tags,
+    date: c.data.date,
+    url: `/certificates`,
+  })),
+];
+
+const indexJson = JSON.stringify(searchIndex);
+---
+
+<BaseLayout title="Search — Cybersecurity Portfolio" description="Search across all projects, blog posts, talks, and certificates.">
+  <div class="py-16 px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto">
+
+      <div class="mb-10">
+        <p class="section-label mb-3">Find anything</p>
+        <h1 class="text-4xl font-bold text-zinc-100 mb-4">Search</h1>
+      </div>
+
+      <!-- Search input -->
+      <div class="relative mb-8">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search projects, posts, talks…"
+          autofocus
+          class="w-full pl-11 pr-4 py-3 bg-zinc-900 border border-zinc-700 focus:border-emerald-500 rounded-lg text-zinc-100 placeholder:text-zinc-600 text-sm outline-none transition-colors font-mono"
+          aria-label="Search"
+        />
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-zinc-600 border border-zinc-700 rounded font-mono">
+          ⌘K
+        </kbd>
+      </div>
+
+      <!-- Filter buttons -->
+      <div class="flex flex-wrap gap-2 mb-6" id="type-filters">
+        {['all', 'project', 'blog', 'talk', 'certificate'].map((t) => (
+          <button
+            data-filter={t}
+            class={`tag cursor-pointer ${t === 'all' ? 'active' : ''}`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      <!-- Stats -->
+      <p id="search-stats" class="text-xs text-zinc-600 font-mono mb-6">
+        {searchIndex.length} items indexed
+      </p>
+
+      <!-- Results -->
+      <div id="search-results" class="flex flex-col gap-3"></div>
+
+      <!-- No results -->
+      <div id="no-results" class="hidden text-center py-12">
+        <p class="text-zinc-600 font-mono">No results found.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ indexJson }}>
+  const INDEX = JSON.parse(indexJson);
+  let query = '';
+  let activeType = 'all';
+
+  const input   = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+  const noRes   = document.getElementById('no-results');
+  const stats   = document.getElementById('search-stats');
+  const filters = document.querySelectorAll('[data-filter]');
+
+  const TYPE_COLORS = {
+    project:     'bg-blue-500/10 text-blue-400 border-blue-400/25',
+    blog:        'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
+    talk:        'bg-purple-500/10 text-purple-400 border-purple-400/25',
+    certificate: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25',
+  };
+
+  function search() {
+    const q = query.toLowerCase().trim();
+    let items = activeType === 'all' ? INDEX : INDEX.filter((i) => i.type === activeType);
+
+    if (q) {
+      items = items.filter((item) =>
+        item.title.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q) ||
+        (item.tags ?? []).some((t) => t.toLowerCase().includes(q))
+      );
+    }
+
+    if (!results || !noRes || !stats) return;
+
+    stats.textContent = `${items.length} result${items.length !== 1 ? 's' : ''}`;
+
+    if (items.length === 0) {
+      results.innerHTML = '';
+      noRes.classList.remove('hidden');
+      return;
+    }
+    noRes.classList.add('hidden');
+    results.innerHTML = items.map((item) => `
+      <a href="${item.url}" class="group flex items-start gap-4 p-4 bg-zinc-900/40 border border-zinc-800 rounded-lg hover:border-zinc-600 transition-all">
+        <span class="shrink-0 mt-0.5 px-2 py-0.5 rounded text-xs font-mono border ${TYPE_COLORS[item.type] ?? ''}">
+          ${item.type}
+        </span>
+        <div class="min-w-0 flex-1">
+          <h3 class="font-medium text-zinc-100 group-hover:text-emerald-400 transition-colors truncate">${item.title}</h3>
+          <p class="text-sm text-zinc-500 mt-0.5 truncate">${item.description}</p>
+          ${item.tags?.length ? `<div class="mt-2 flex flex-wrap gap-1.5">${item.tags.slice(0,4).map((t) => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+        </div>
+      </a>
+    `).join('');
+  }
+
+  input?.addEventListener('input', (e) => {
+    query = (e.target).value;
+    search();
+  });
+
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filters.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeType = btn.getAttribute('data-filter') ?? 'all';
+      search();
+    });
+  });
+
+  // ⌘K / Ctrl+K focus
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      input?.focus();
+    }
+  });
+
+  // Show all on load
+  search();
+</script>

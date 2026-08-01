@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  description = 'Cybersecurity researcher, penetration tester, and security engineer building a safer digital world.',
+  image = '/og-default.png',
+  type = 'website',
+  noindex = false,
+  class: className = '',
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : '';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'http://localhost:4321');
+const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#050505" />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content={type} />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta property="og:site_name"   content="Security Portfolio" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" sizes="32x32"        href="/favicon-32.png" />
+    <link rel="apple-touch-icon"          href="/apple-touch-icon.png" />
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
+
+    <!-- Inter font (system fallback — no external requests needed for performance) -->
+    <!-- To use Google Fonts, add: <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet"> -->
+
+    <title>{title}</title>
+  </head>
+  <body class={`min-h-screen flex flex-col bg-[#050505] text-zinc-100 ${className}`}>
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
