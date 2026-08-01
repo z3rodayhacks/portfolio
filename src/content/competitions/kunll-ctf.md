@@ -1,29 +1,25 @@
 ---
-title: KUNLL CTF
-description: 'Rapid enumeration and clean notes → faster pivots under pressure
-
-
-  Solid crypto pipeline (read → reduce → verify) for isogeny/McEliece-style puzzles
-
-
-  Disciplined forensics flow (carve → validate → extract → document)'
+title: KNULL CTF
+description: Competed in the KNULL CTF, applying rapid enumeration, clean note-taking,
+  a solid crypto pipeline for isogeny/McEliece-style puzzles, and disciplined forensics
+  flow across carve, validate, extract, and document stages.
 date: '2025-05-10'
-event: KULL
-organizer: Team Kull
-location: online
+event: KNULL CTF
+organizer: Team KNULL
+location: Online
 result: Finalist
-team: 0XZ3roDay
+team: 0xZ3roDay
 teamSize: 2
 project: Challenge CTF
-linkedin: https://www.linkedin.com/posts/joshua2508_11th-ctf-cybersecurity-ugcPost-7370170172982202368-_dPM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE-SlxEBI8QC5mTQnEHy8KEGA7k2rk50iwA
+linkedin: https://www.linkedin.com/posts/joshua2508_11th-ctf-cybersecurity-ugcPost-7370170172982202368-_dPM
 thumbnail: /images/competitions/1757185498659.jpg
 images:
-- /images/competitions/1757185498981.jpg
-- /images/competitions/1757185498659.jpg
-- /images/competitions/1757185498981.jpg
+  - /images/competitions/1757185498659.jpg
+  - /images/competitions/1757185498981.jpg
 tags:
-- ctf
+  - ctf
+  - cybersecurity
+  - cryptography
+  - forensics
 featured: false
 ---
-
-
