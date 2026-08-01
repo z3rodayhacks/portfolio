@@ -4,6 +4,8 @@ description: "Covered the foundations of cybersecurity including the CIA triad, 
 date: "2025-03-09"
 event: "0xArchive SREC Cyber Seminar"
 location: "Sri Ramakrishna Engineering College, Coimbatore"
+linkedin: "https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_i-had-the-opportunity-to-deliver-a-session-activity-7369476012042108930-phcv"
+images: []
 tags: ["Zero Trust", "Network Security", "Cybersecurity", "Foundations"]
 featured: true
 ---

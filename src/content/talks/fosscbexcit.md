@@ -4,6 +4,8 @@ description: "A practical session demonstrating how to build a cybersecurity res
 date: "2026-06-01"
 event: "FOSS United Coimbatore x FOSS CIT"
 location: "Coimbatore Institute of Technology"
+linkedin: "https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_foss-activity-7487046580424974337-sZOK"
+images: []
 tags: ["Foundations", "Cybersecurity", "Open Source", "Kali Linux"]
 featured: true
 ---

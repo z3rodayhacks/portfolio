@@ -5,70 +5,136 @@ import { sortByDate, formatDate } from '../lib/utils';
 
 const allTalks = await getCollection('talks');
 const sorted   = sortByDate(allTalks);
+
+// Extract YouTube video ID from URL
+function youtubeId(url: string): string | null {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/]+)/);
+  return m ? m[1] : null;
+}
 ---
 
-<BaseLayout title="Talks — Cybersecurity Portfolio" description="Conference talks, webinars, and workshop presentations on cybersecurity topics.">
+<BaseLayout title="Talks — Jashwanth Raghav" description="Sessions, workshops, and presentations on cybersecurity topics.">
   <div class="py-16 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto">
 
       <div class="mb-12">
         <p class="section-label mb-3">Speaking</p>
-        <h1 class="text-4xl font-bold text-zinc-100 mb-4">Talks & Presentations</h1>
+        <h1 class="text-4xl font-bold text-zinc-100 mb-4">Talks & Sessions</h1>
         <p class="text-zinc-400 max-w-xl">
-          Conference presentations, workshops, and webinars on security research and techniques.
+          Conference presentations, workshops, and community sessions on security research and techniques.
         </p>
       </div>
 
       {sorted.length === 0 ? (
         <div class="text-center py-20">
           <p class="font-mono text-zinc-600">No talks added yet.</p>
-          <p class="text-zinc-700 text-sm mt-2">Add <code class="font-mono text-xs bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">src/content/talks/*.md</code> files to populate this page.</p>
         </div>
       ) : (
-        <div class="flex flex-col gap-5">
-          {sorted.map((talk) => (
-            <article class="p-6 bg-zinc-900/40 border border-zinc-800 rounded-lg hover:border-zinc-700 transition-colors">
-              <div class="flex flex-col sm:flex-row gap-5">
-                {talk.data.thumbnail && (
-                  <div class="sm:w-48 h-32 shrink-0 rounded overflow-hidden bg-zinc-900">
-                    <img src={talk.data.thumbnail} alt={talk.data.title} loading="lazy" decoding="async"
-                      class="w-full h-full object-cover opacity-80" />
+        <div class="flex flex-col gap-8">
+          {sorted.map((talk) => {
+            const vidId = talk.data.video ? youtubeId(talk.data.video) : null;
+            return (
+              <article class="bg-zinc-900/40 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
+
+                <!-- Thumbnail or first image -->
+                {(talk.data.thumbnail || talk.data.images?.[0]) && (
+                  <div class="h-52 overflow-hidden bg-zinc-900">
+                    <img
+                      src={talk.data.thumbnail ?? talk.data.images[0]}
+                      alt={talk.data.title}
+                      loading="lazy" decoding="async"
+                      class="w-full h-full object-cover opacity-85 hover:opacity-100 transition-opacity"
+                    />
                   </div>
                 )}
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 text-xs text-zinc-600 font-mono mb-2">
+
+                <div class="p-6">
+                  <!-- Meta -->
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 font-mono mb-3">
                     <time datetime={talk.data.date}>{formatDate(talk.data.date, { year: 'numeric', month: 'short' })}</time>
                     <span class="text-zinc-700">·</span>
                     <span class="text-emerald-400">{talk.data.event}</span>
-                    {talk.data.location && <><span class="text-zinc-700">·</span><span>{talk.data.location}</span></>}
+                    {talk.data.location && (
+                      <>
+                        <span class="text-zinc-700">·</span>
+                        <span class="flex items-center gap-1">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                          {talk.data.location}
+                        </span>
+                      </>
+                    )}
                   </div>
+
+                  <!-- Title & description -->
                   <h2 class="font-semibold text-zinc-100 text-lg leading-snug mb-2">{talk.data.title}</h2>
                   <p class="text-sm text-zinc-500 leading-relaxed mb-4">{talk.data.description}</p>
+
+                  <!-- Tags -->
                   {talk.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-1.5 mb-4">
+                    <div class="flex flex-wrap gap-1.5 mb-5">
                       {talk.data.tags.map((tag) => <span class="tag">{tag}</span>)}
                     </div>
                   )}
-                  <div class="flex gap-3">
+
+                  <!-- Action buttons -->
+                  <div class="flex flex-wrap gap-3 mb-5">
+                    {talk.data.linkedin && (
+                      <a href={talk.data.linkedin} target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/15 border border-blue-500/25 text-blue-400 rounded text-sm transition-all">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        LinkedIn Post
+                      </a>
+                    )}
                     {talk.data.slides && (
                       <a href={talk.data.slides} target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 rounded text-sm transition-all">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 rounded text-sm transition-all">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                         Slides
                       </a>
                     )}
                     {talk.data.video && (
                       <a href={talk.data.video} target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded text-sm transition-all">
+                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded text-sm transition-all">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                         Watch
                       </a>
                     )}
                   </div>
+
+                  <!-- Embedded YouTube video -->
+                  {vidId && (
+                    <div class="mb-5 rounded-lg overflow-hidden border border-zinc-800 aspect-video">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${vidId}`}
+                        title={talk.data.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        loading="lazy"
+                        class="w-full h-full"
+                      ></iframe>
+                    </div>
+                  )}
+
+                  <!-- Additional images gallery -->
+                  {talk.data.images && talk.data.images.length > 0 && (
+                    <div class={`grid gap-3 ${talk.data.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                      {talk.data.images.map((img, i) => (
+                        <div class="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
+                          <img
+                            src={img}
+                            alt={`${talk.data.title} — image ${i + 1}`}
+                            loading="lazy"
+                            decoding="async"
+                            class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       )}
     </div>

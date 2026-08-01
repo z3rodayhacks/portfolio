@@ -4,6 +4,8 @@ description: "Built a startup-ready security detection stack from the ground up 
 date: "2026-06-02"
 event: "OWASP SREC Workshop"
 location: "Sri Ramakrishna Engineering College, Coimbatore"
+linkedin: "https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_cybersecurity-startupsecurity-blueteam-activity-7423529450648260608-C-Vd"
+images: []
 tags: ["Defensive Security", "Network Security", "Blue Team", "Cybersecurity"]
 featured: true
 ---
