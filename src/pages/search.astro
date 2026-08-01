@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { formatDate, readingTime } from '../lib/utils';
 
-// Build a search index at build time — static JSON served from the same page
+// Build a search index at build time - static JSON served from the same page
 const projects     = await getCollection('projects');
 const posts        = await getCollection('blog', ({ data }) => !data.draft);
 const talks        = await getCollection('talks');
@@ -52,7 +52,7 @@ const searchIndex = [
     type: 'competition',
     id:   c.id,
     title: c.data.title,
-    description: `${c.data.event}${c.data.result ? ' — ' + c.data.result : ''}`,
+    description: `${c.data.event}${c.data.result ? ' - ' + c.data.result : ''}`,
     tags: c.data.tags,
     date: c.data.date,
     url: `/competitions`,
@@ -62,7 +62,7 @@ const searchIndex = [
 const indexJson = JSON.stringify(searchIndex);
 ---
 
-<BaseLayout title="Search — Cybersecurity Portfolio" description="Search across all projects, blog posts, talks, and certificates.">
+<BaseLayout title="Search - Cybersecurity Portfolio" description="Search across all projects, blog posts, talks, and certificates.">
   <div class="py-16 px-4 sm:px-6">
     <div class="max-w-3xl mx-auto">
 

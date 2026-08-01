@@ -1,6 +1,6 @@
 ---
 title: "Building a Cybersecurity Research Lab Using Only Open Source"
-description: "A practical session demonstrating how to build a cybersecurity research environment using virtual machines, Kali Linux, Docker, and open-source security tools — without relying on expensive commercial solutions."
+description: "A practical session demonstrating how to build a cybersecurity research environment using virtual machines, Kali Linux, Docker, and open-source security tools - without relying on expensive commercial solutions."
 date: "2026-06-01"
 event: "FOSS United Coimbatore x FOSS CIT"
 location: "Coimbatore Institute of Technology"

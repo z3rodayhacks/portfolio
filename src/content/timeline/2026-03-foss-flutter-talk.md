@@ -1,5 +1,5 @@
 ---
-title: Speaker — Inside TOR (FOSS United x Namma Flutter)
+title: Speaker - Inside TOR (FOSS United x Namma Flutter)
 date: '2026-03-28'
 description: Presented on how TOR's onion routing preserves anonymity at FOSS United
   Coimbatore x Namma Flutter event hosted at Sri Ramakrishna Engineering College.

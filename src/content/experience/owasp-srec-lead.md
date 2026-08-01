@@ -1,5 +1,5 @@
 ---
-title: Chairman — OWASP SREC Student Chapter
+title: Chairman - OWASP SREC Student Chapter
 company: OWASP SREC
 location: Coimbatore, Tamil Nadu
 startDate: '2025-03-10'

@@ -2,7 +2,7 @@
 title: SREC Domestic Hackathon
 description: A month-long innovation challenge at Sri Ramakrishna Engineering College.
   Team 0xZ3roDay secured 2nd place by developing an On-Duty Procurement & Event Management
-  System to simplify student on-duty requests and event record management — a refreshing
+  System to simplify student on-duty requests and event record management - a refreshing
   opportunity to step outside cybersecurity and build a practical full-stack solution.
 date: '2025-10-22'
 event: SREC Domestic Hackathon

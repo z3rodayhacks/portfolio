@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   );
 
   return rss({
-    title: 'Cybersecurity Portfolio — Blog',
+    title: 'Cybersecurity Portfolio - Blog',
     description: 'Security research articles, CTF writeups, vulnerability disclosures, and tool guides.',
     site: context.site ?? 'https://yoursite.com',
     items: sorted.map((post) => ({

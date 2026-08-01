@@ -9,4 +9,4 @@ tags:
 featured: true
 ---
 
-Completed the CCEP certification, strengthening expertise in cybersecurity fundamentals, defensive strategies, and security education best practices — covering network security, cloud, IAM, offensive security, application security, and incident response.
+Completed the CCEP certification, strengthening expertise in cybersecurity fundamentals, defensive strategies, and security education best practices - covering network security, cloud, IAM, offensive security, application security, and incident response.

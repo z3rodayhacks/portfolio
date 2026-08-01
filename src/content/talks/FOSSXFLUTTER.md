@@ -13,6 +13,6 @@ tags: ["Defensive Security", "Network Security", "Threat Intelligence", "TOR"]
 featured: true
 ---
 
-Presented at Sri Ramakrishna Engineering College — MBA Computer Lab.
+Presented at Sri Ramakrishna Engineering College - MBA Computer Lab.
 
 Covered TOR architecture, Firefox, and open-source software toolkits for privacy and anonymity.

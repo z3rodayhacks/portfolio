@@ -15,7 +15,7 @@ const skills = {
 };
 ---
 
-<BaseLayout title="About — Cybersecurity Portfolio" description="Learn more about my background, skills, experience, and approach to security.">
+<BaseLayout title="About - Cybersecurity Portfolio" description="Learn more about my background, skills, experience, and approach to security.">
   <div class="py-16 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto">
 
@@ -44,7 +44,7 @@ const skills = {
             <p class="text-zinc-500 leading-relaxed">
               My interests span offensive security, vulnerability research, malware analysis,
               reverse engineering, network security, and automation. I'm particularly fascinated
-              by malware internals — studying how malicious software operates to better understand
+              by malware internals - studying how malicious software operates to better understand
               detection and defensive strategies. Beyond research, I actively participate in
               hackathons, CTF competitions, and the cybersecurity community as OWASP SREC Chairman,
               DCG91422 Member, and IEEE Treasurer.
@@ -97,7 +97,7 @@ const skills = {
                     <p class="text-emerald-400 text-sm">{job.data.company}</p>
                   </div>
                   <div class="text-xs font-mono text-zinc-600 shrink-0 text-left sm:text-right">
-                    <div>{formatDate(job.data.startDate, { year: 'numeric', month: 'short' })} — {job.data.current ? <span class="text-emerald-400">Present</span> : formatDate(job.data.endDate ?? job.data.startDate, { year: 'numeric', month: 'short' })}</div>
+                    <div>{formatDate(job.data.startDate, { year: 'numeric', month: 'short' })} - {job.data.current ? <span class="text-emerald-400">Present</span> : formatDate(job.data.endDate ?? job.data.startDate, { year: 'numeric', month: 'short' })}</div>
                     {job.data.location && <div>{job.data.location}</div>}
                   </div>
                 </div>

@@ -22,4 +22,4 @@ tags:
 featured: true
 ---
 
-0xZ3roDay's first WIN — built TOR-Unveil, a tool to deanonymize Tor hidden services using favicon hash correlation against Shodan.
+0xZ3roDay's first WIN - built TOR-Unveil, a tool to deanonymize Tor hidden services using favicon hash correlation against Shodan.

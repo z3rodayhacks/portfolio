@@ -24,4 +24,4 @@ tags:
 featured: true
 ---
 
-Team 0xZ3roDay secured 3rd Place across challenges in Digital Forensics, Steganography, Cryptography, Web Security, Reverse Engineering, and OSINT — continuing a strong tradition of competitive CTF performances.
+Team 0xZ3roDay secured 3rd Place across challenges in Digital Forensics, Steganography, Cryptography, Web Security, Reverse Engineering, and OSINT - continuing a strong tradition of competitive CTF performances.

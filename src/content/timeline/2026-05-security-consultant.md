@@ -1,5 +1,5 @@
 ---
-title: Security Consultant — TechGuard Labs Foundation
+title: Security Consultant - TechGuard Labs Foundation
 date: '2026-05-10'
 description: Joined TechGuard Labs Foundation as Security Consultant conducting penetration
   testing, security assessments, vulnerability research, and threat analysis.

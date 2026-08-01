@@ -1,5 +1,5 @@
 ---
-title: Certified Cybersecurity Educator Professional (CCEP) — Red Team Leaders
+title: Certified Cybersecurity Educator Professional (CCEP) - Red Team Leaders
 date: '2025-12-09'
 description: Completed the CCEP certification covering network security, cloud, IAM,
   offensive security, application security, and incident response.

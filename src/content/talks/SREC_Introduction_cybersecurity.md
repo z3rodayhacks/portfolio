@@ -13,6 +13,6 @@ tags: ["Zero Trust", "Network Security", "Cybersecurity", "Foundations"]
 featured: true
 ---
 
-Presented at Sri Ramakrishna Engineering College — CSE Seminar Hall.
+Presented at Sri Ramakrishna Engineering College - CSE Seminar Hall.
 
 Covered CIA Triad, foundations of cybersecurity, real-world attacks like WannaCry, and career paths in cybersecurity.
