@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://yourportfolio.pages.dev',
+  site: 'https://gli4chskldfup3245mafdafksjdfjdfsdfsdfsrdcszd.online',
   vite: {
     plugins: [tailwindcss()],
   },
