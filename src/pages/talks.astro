@@ -6,7 +6,6 @@ import { sortByDate, formatDate } from '../lib/utils';
 const allTalks = await getCollection('talks');
 const sorted   = sortByDate(allTalks);
 
-// Extract YouTube video ID from URL
 function youtubeId(url: string): string | null {
   const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/]+)/);
   return m ? m[1] : null;
@@ -25,118 +24,199 @@ function youtubeId(url: string): string | null {
         </p>
       </div>
 
-      {sorted.length === 0 ? (
-        <div class="text-center py-20">
-          <p class="font-mono text-zinc-600">No talks added yet.</p>
-        </div>
-      ) : (
-        <div class="flex flex-col gap-8">
-          {sorted.map((talk) => {
-            const vidId = talk.data.video ? youtubeId(talk.data.video) : null;
-            return (
-              <article class="bg-zinc-900/40 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
+      <div class="flex flex-col gap-8">
+        {sorted.map((talk, talkIndex) => {
+          const vidId = talk.data.video ? youtubeId(talk.data.video) : null;
+          return (
+            <article class="bg-zinc-900/40 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-colors">
+              <div class="p-6">
+                <!-- Meta -->
+                <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 font-mono mb-3">
+                  <time datetime={talk.data.date}>{formatDate(talk.data.date, { year: 'numeric', month: 'short' })}</time>
+                  <span class="text-zinc-700">·</span>
+                  <span class="text-emerald-400">{talk.data.event}</span>
+                  {talk.data.location && (
+                    <>
+                      <span class="text-zinc-700">·</span>
+                      <span class="flex items-center gap-1">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {talk.data.location}
+                      </span>
+                    </>
+                  )}
+                </div>
 
-                <!-- Thumbnail or first image -->
-                {(talk.data.thumbnail || talk.data.images?.[0]) && (
-                  <div class="h-52 overflow-hidden bg-zinc-900">
-                    <img
-                      src={talk.data.thumbnail ?? talk.data.images[0]}
-                      alt={talk.data.title}
-                      loading="lazy" decoding="async"
-                      class="w-full h-full object-cover opacity-85 hover:opacity-100 transition-opacity"
-                    />
+                <!-- Title & description -->
+                <h2 class="font-semibold text-zinc-100 text-lg leading-snug mb-2">{talk.data.title}</h2>
+                <p class="text-sm text-zinc-500 leading-relaxed mb-4">{talk.data.description}</p>
+
+                <!-- Tags -->
+                {talk.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 mb-5">
+                    {talk.data.tags.map((tag) => <span class="tag">{tag}</span>)}
                   </div>
                 )}
 
-                <div class="p-6">
-                  <!-- Meta -->
-                  <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 font-mono mb-3">
-                    <time datetime={talk.data.date}>{formatDate(talk.data.date, { year: 'numeric', month: 'short' })}</time>
-                    <span class="text-zinc-700">·</span>
-                    <span class="text-emerald-400">{talk.data.event}</span>
-                    {talk.data.location && (
-                      <>
-                        <span class="text-zinc-700">·</span>
-                        <span class="flex items-center gap-1">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                          {talk.data.location}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  <!-- Title & description -->
-                  <h2 class="font-semibold text-zinc-100 text-lg leading-snug mb-2">{talk.data.title}</h2>
-                  <p class="text-sm text-zinc-500 leading-relaxed mb-4">{talk.data.description}</p>
-
-                  <!-- Tags -->
-                  {talk.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-1.5 mb-5">
-                      {talk.data.tags.map((tag) => <span class="tag">{tag}</span>)}
-                    </div>
+                <!-- Action buttons -->
+                <div class="flex flex-wrap gap-3 mb-5">
+                  {talk.data.linkedin && (
+                    <a href={talk.data.linkedin} target="_blank" rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/15 border border-blue-500/25 text-blue-400 rounded text-sm transition-all">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                      LinkedIn Post
+                    </a>
                   )}
-
-                  <!-- Action buttons -->
-                  <div class="flex flex-wrap gap-3 mb-5">
-                    {talk.data.linkedin && (
-                      <a href={talk.data.linkedin} target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/15 border border-blue-500/25 text-blue-400 rounded text-sm transition-all">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        LinkedIn Post
-                      </a>
-                    )}
-                    {talk.data.slides && (
-                      <a href={talk.data.slides} target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 rounded text-sm transition-all">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                        Slides
-                      </a>
-                    )}
-                    {talk.data.video && (
-                      <a href={talk.data.video} target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded text-sm transition-all">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                        Watch
-                      </a>
-                    )}
-                  </div>
-
-                  <!-- Embedded YouTube video -->
-                  {vidId && (
-                    <div class="mb-5 rounded-lg overflow-hidden border border-zinc-800 aspect-video">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${vidId}`}
-                        title={talk.data.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        loading="lazy"
-                        class="w-full h-full"
-                      ></iframe>
-                    </div>
+                  {talk.data.slides && (
+                    <a href={talk.data.slides} target="_blank" rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-300 rounded text-sm transition-all">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                      Slides
+                    </a>
                   )}
-
-                  <!-- Additional images gallery -->
-                  {talk.data.images && talk.data.images.length > 0 && (
-                    <div class={`grid gap-3 ${talk.data.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
-                      {talk.data.images.map((img, i) => (
-                        <div class="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
-                          <img
-                            src={img}
-                            alt={`${talk.data.title} — image ${i + 1}`}
-                            loading="lazy"
-                            decoding="async"
-                            class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  {talk.data.video && (
+                    <a href={talk.data.video} target="_blank" rel="noopener noreferrer"
+                      class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded text-sm transition-all">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      Watch
+                    </a>
                   )}
                 </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
+
+                <!-- YouTube embed -->
+                {vidId && (
+                  <div class="mb-5 rounded-lg overflow-hidden border border-zinc-800 aspect-video">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${vidId}`}
+                      title={talk.data.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen loading="lazy"
+                      class="w-full h-full"
+                    ></iframe>
+                  </div>
+                )}
+
+                <!-- Images grid with lightbox trigger -->
+                {talk.data.images && talk.data.images.length > 0 && (
+                  <div class={`grid gap-3 ${talk.data.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2 sm:grid-cols-3'}`}>
+                    {talk.data.images.map((img, imgIndex) => (
+                      <button
+                        type="button"
+                        class="group relative rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 cursor-zoom-in"
+                        data-gallery={`talk-${talkIndex}`}
+                        data-index={imgIndex}
+                        data-images={JSON.stringify(talk.data.images)}
+                        aria-label={`View image ${imgIndex + 1} of ${talk.data.images.length}`}
+                      >
+                        <img
+                          src={img}
+                          alt={`${talk.data.title} — image ${imgIndex + 1}`}
+                          loading="lazy" decoding="async"
+                          class="w-full h-40 object-cover group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
+                        />
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
   </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <!-- Close -->
+    <button id="lb-close" class="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Prev -->
+    <button id="lb-prev" class="absolute left-3 sm:left-6 z-10 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all" aria-label="Previous image">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+
+    <!-- Image -->
+    <div class="max-w-5xl max-h-[90vh] w-full px-16 flex items-center justify-center">
+      <img id="lb-img" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-lg select-none" />
+    </div>
+
+    <!-- Next -->
+    <button id="lb-next" class="absolute right-3 sm:right-6 z-10 p-2.5 rounded-full bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all" aria-label="Next image">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <!-- Counter -->
+    <div id="lb-counter" class="absolute bottom-5 left-1/2 -translate-x-1/2 text-xs font-mono text-zinc-500 bg-zinc-900/80 px-3 py-1 rounded-full"></div>
+  </div>
 </BaseLayout>
+
+<script>
+  let images: string[] = [];
+  let current = 0;
+
+  const lb       = document.getElementById('lightbox')!;
+  const lbImg    = document.getElementById('lb-img') as HTMLImageElement;
+  const lbPrev   = document.getElementById('lb-prev')!;
+  const lbNext   = document.getElementById('lb-next')!;
+  const lbClose  = document.getElementById('lb-close')!;
+  const lbCounter = document.getElementById('lb-counter')!;
+
+  function show(index: number) {
+    current = (index + images.length) % images.length;
+    lbImg.src = images[current];
+    lbCounter.textContent = `${current + 1} / ${images.length}`;
+    lbPrev.style.display = images.length <= 1 ? 'none' : '';
+    lbNext.style.display = images.length <= 1 ? 'none' : '';
+  }
+
+  function open(imgs: string[], index: number) {
+    images = imgs;
+    lb.classList.remove('hidden');
+    lb.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    show(index);
+  }
+
+  function close() {
+    lb.classList.add('hidden');
+    lb.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  // Attach click to all image buttons
+  document.querySelectorAll('[data-gallery]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const imgs = JSON.parse(btn.getAttribute('data-images') || '[]') as string[];
+      const idx  = parseInt(btn.getAttribute('data-index') || '0', 10);
+      open(imgs, idx);
+    });
+  });
+
+  lbClose.addEventListener('click', close);
+  lbPrev.addEventListener('click', () => show(current - 1));
+  lbNext.addEventListener('click', () => show(current + 1));
+
+  // Close on backdrop click
+  lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (lb.classList.contains('hidden')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  lb.addEventListener('touchend',   (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) show(diff > 0 ? current + 1 : current - 1);
+  });
+</script>
