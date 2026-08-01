@@ -25,8 +25,8 @@
 
     <!-- Name -->
     <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-none mb-4 animate-fade-up-1">
-      <span class="text-zinc-100">Your</span>
-      <span class="text-emerald-400"> Name</span>
+      <span class="text-zinc-100">Jashwanth</span>
+      <span class="text-emerald-400"> Raghav R K</span>
     </h1>
 
     <!-- Role -->
@@ -36,11 +36,9 @@
 
     <!-- Description -->
     <p class="max-w-2xl text-base sm:text-lg text-zinc-400 leading-relaxed mb-10 animate-fade-up-3">
-      I research vulnerabilities, build secure systems, and share knowledge
-      through <a href="/talks" class="text-emerald-400 hover:text-emerald-300 transition-colors">talks</a> and
-      <a href="/blog" class="text-emerald-400 hover:text-emerald-300 transition-colors">writing</a>.
-      Currently focused on offensive security, threat modeling, and building
-      tools that help defenders.
+      Cybersecurity Researcher & Security Consultant passionate about offensive security,
+      malware analysis, and reverse engineering. OWASP SREC Chairman · DCG91422 Member ·
+      IEEE Treasurer · based in <span class="text-zinc-300">Coimbatore, India</span>.
     </p>
 
     <!-- CTAs -->
@@ -63,10 +61,10 @@
     <!-- Stat pills -->
     <div class="mt-14 flex flex-wrap gap-3 animate-fade-up-4">
       {[
-        { label: 'Projects', value: '20+' },
-        { label: 'CVEs Found', value: '5' },
-        { label: 'Blog Posts', value: '30+' },
-        { label: 'Conference Talks', value: '8' },
+        { label: 'CTF Competitions', value: '10+' },
+        { label: 'Certifications', value: '5+' },
+        { label: 'Hackathons', value: '8+' },
+        { label: 'Community Roles', value: '3' },
       ].map(({ label, value }) => (
         <div class="flex items-center gap-2.5 px-4 py-2 bg-zinc-900/60 border border-zinc-800 rounded-full text-sm">
           <span class="text-emerald-400 font-bold font-mono">{value}</span>
@@ -88,11 +86,12 @@
 <script>
   // Simple role typewriter
   const roles = [
-    'Cybersecurity Engineer',
-    'Penetration Tester',
-    'Security Researcher',
+    'Security Consultant',
+    'Malware Researcher',
+    'OWASP SREC Chairman',
+    'Ethical Hacker',
     'CTF Player',
-    'Bug Hunter',
+    'Dark Web Researcher',
   ];
   const el = document.getElementById('role-text');
   if (el) {

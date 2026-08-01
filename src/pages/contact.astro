@@ -18,10 +18,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <!-- Contact cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 animate-fade-up-1">
         {[
-          { icon: 'mail', label: 'Email', value: 'you@domain.com', href: 'mailto:you@domain.com' },
-          { icon: 'linkedin', label: 'LinkedIn', value: '/in/yourprofile', href: 'https://linkedin.com/in/yourprofile' },
-          { icon: 'github', label: 'GitHub', value: '@yourusername', href: 'https://github.com/yourusername' },
-          { icon: 'twitter', label: 'X / Twitter', value: '@yourhandle', href: 'https://twitter.com/yourhandle' },
+          { icon: 'linkedin', label: 'LinkedIn', value: '/in/jashwanth-raghav-5a9111313', href: 'https://linkedin.com/in/jashwanth-raghav-5a9111313/' },
+          { icon: 'github', label: 'GitHub', value: '@z3rodayhacks', href: 'https://github.com/z3rodayhacks' },
         ].map(({ icon, label, value, href }) => (
           <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
             class="group flex items-center gap-4 p-4 bg-zinc-900/40 border border-zinc-800 rounded-lg hover:border-zinc-600 transition-all">

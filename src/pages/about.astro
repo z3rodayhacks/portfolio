@@ -8,10 +8,10 @@ const sortedExp   = experience.sort((a, b) => b.data.order - a.data.order);
 const allCerts    = await getCollection('certificates');
 
 const skills = {
-  'Offensive Security': ['Penetration Testing', 'Red Teaming', 'Exploit Development', 'CTF', 'OSINT'],
-  'Defensive Security': ['Threat Modeling', 'Incident Response', 'SIEM', 'IDS/IPS', 'DFIR'],
-  'Cloud & DevSecOps':  ['AWS Security', 'Azure Security', 'Docker', 'Kubernetes', 'CI/CD Security'],
-  'Development':        ['Python', 'Go', 'Bash', 'JavaScript', 'Rust'],
+  'Offensive Security':  ['Penetration Testing', 'Vulnerability Research', 'Exploit Development', 'CTF', 'OSINT'],
+  'Malware & Forensics': ['Malware Analysis', 'Reverse Engineering', 'Dark Web Research', 'Incident Response', 'DFIR'],
+  'Network Security':    ['Network Security', 'Cisco', 'Wireshark', 'IDS/IPS', 'Traffic Analysis'],
+  'Development':         ['Python', 'Bash', 'JavaScript', 'Security Tooling', 'Automation'],
 };
 ---
 
@@ -33,16 +33,21 @@ const skills = {
             </div>
           </div>
           <div class="flex-1">
-            <h2 class="text-xl font-semibold text-zinc-100 mb-1">Your Name</h2>
-            <p class="text-emerald-400 font-mono text-sm mb-4">Cybersecurity Engineer / Researcher</p>
+            <h2 class="text-xl font-semibold text-zinc-100 mb-1">Jashwanth Raghav R K</h2>
+            <p class="text-emerald-400 font-mono text-sm mb-4">Security Consultant · OWASP SREC Chairman · Cisco Certified Ethical Hacker</p>
             <p class="text-zinc-400 leading-relaxed mb-4">
-              I'm a cybersecurity professional with a focus on offensive security and research.
-              I find vulnerabilities, build tools that help defenders, and share what I learn
-              through talks, blog posts, and open-source projects.
+              I'm a Cybersecurity Researcher and Security Consultant with a strong passion for
+              understanding how complex systems work and how they can be secured. I enjoy building
+              security-focused tools, conducting security research, and developing software that
+              solves practical problems.
             </p>
             <p class="text-zinc-500 leading-relaxed">
-              When I'm not hacking things, I'm competing in CTFs, contributing to open-source
-              security projects, or mentoring the next generation of security professionals.
+              My interests span offensive security, vulnerability research, malware analysis,
+              reverse engineering, network security, and automation. I'm particularly fascinated
+              by malware internals — studying how malicious software operates to better understand
+              detection and defensive strategies. Beyond research, I actively participate in
+              hackathons, CTF competitions, and the cybersecurity community as OWASP SREC Chairman,
+              DCG91422 Member, and IEEE Treasurer.
             </p>
             <div class="mt-5 flex flex-wrap gap-3">
               <a href="/resume.pdf" target="_blank"
