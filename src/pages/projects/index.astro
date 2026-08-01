@@ -46,7 +46,7 @@ const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTa
       {filtered.length === 0 ? (
         <div class="text-center py-20 text-zinc-600">
           <p class="font-mono">No projects found for tag "{activeTag}"</p>
-          <a href="/projects" class="mt-4 inline-block text-emerald-400 hover:underline text-sm">Clear filter</a>
+          <a href="/projects" class="mt-4 inline-block text-cyan-400 hover:underline text-sm">Clear filter</a>
         </div>
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -65,11 +65,11 @@ const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTa
               )}
               <div class="flex-1 flex flex-col p-5">
                 <div class="flex items-start justify-between gap-2 mb-2">
-                  <h2 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-tight">
+                  <h2 class="font-semibold text-zinc-100 group-hover:text-cyan-400 transition-colors leading-tight">
                     {project.data.title}
                   </h2>
                   <span class={`shrink-0 px-2 py-0.5 text-xs font-mono rounded ${
-                    project.data.status === 'completed'   ? 'bg-emerald-500/10 text-emerald-400' :
+                    project.data.status === 'completed'   ? 'bg-cyan-500/10 text-cyan-400' :
                     project.data.status === 'in-progress' ? 'bg-yellow-500/10 text-yellow-400' :
                                                              'bg-zinc-700/30 text-zinc-500'
                   }`}>{project.data.status}</span>
@@ -82,7 +82,7 @@ const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTa
                 )}
                 <div class="flex items-center justify-between pt-3 border-t border-zinc-800 text-xs text-zinc-600 font-mono">
                   <span>{formatDate(project.data.date, { year: 'numeric', month: 'short' })}</span>
-                  <span class="text-emerald-500 group-hover:translate-x-1 transition-transform inline-block">→</span>
+                  <span class="text-cyan-500 group-hover:translate-x-1 transition-transform inline-block">→</span>
                 </div>
               </div>
             </a>

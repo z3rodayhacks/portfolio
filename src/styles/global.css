@@ -12,9 +12,11 @@
   --color-card-2:   #141414;
   --color-border:   #1c1c1c;
   --color-border-2: #262626;
-  --color-green:    #22c55e;
-  --color-green-2:  #16a34a;
-  --color-green-3:  #4ade80;
+  --color-cyan:     #22d3ee;
+  --color-cyan-2:   #06b6d4;
+  --color-cyan-3:   #67e8f9;
+  --color-purple:   #a855f7;
+  --color-purple-2: #c084fc;
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
@@ -31,7 +33,7 @@ body {
 }
 
 ::selection {
-  background-color: rgba(34, 197, 94, 0.15);
+  background-color: rgba(34, 211, 238, 0.15);
   color: #f4f4f5;
 }
 
@@ -40,11 +42,11 @@ body {
 ::-webkit-scrollbar-thumb  { background: #27272a; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
-/* ── Subtle grid background for pages ──────────────────────── */
+/* ── ctOS grid background ───────────────────────────────────── */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    linear-gradient(rgba(34,211,238,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,.03) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -82,8 +84,8 @@ body {
   --tw-prose-body:          #a1a1aa;
   --tw-prose-headings:      #f4f4f5;
   --tw-prose-bold:          #e4e4e7;
-  --tw-prose-links:         #22c55e;
-  --tw-prose-code:          #4ade80;
+  --tw-prose-links:         #22d3ee;
+  --tw-prose-code:          #67e8f9;
   --tw-prose-pre-bg:        #09090b;
   --tw-prose-pre-code:      #f4f4f5;
   --tw-prose-hr:            #27272a;
@@ -92,13 +94,13 @@ body {
   --tw-prose-bullets:       #4b5563;
   --tw-prose-counters:      #4b5563;
   --tw-prose-quotes:        #a1a1aa;
-  --tw-prose-quote-borders: #22c55e;
+  --tw-prose-quote-borders: #22d3ee;
   --tw-prose-captions:      #71717a;
   max-width: none;
 }
 
-.prose a { text-decoration: none; border-bottom: 1px solid rgba(34,197,94,.35); transition: border-color .15s; }
-.prose a:hover { border-color: #22c55e; }
+.prose a { text-decoration: none; border-bottom: 1px solid rgba(34,211,238,.35); transition: border-color .15s; }
+.prose a:hover { border-color: #22d3ee; }
 .prose :where(h2) { border-bottom: 1px solid #1c1c1c; padding-bottom: .5rem; }
 .prose :where(code):not(pre code) {
   background: #1a1a1a;
@@ -106,11 +108,11 @@ body {
   border-radius: .3rem;
   padding: .1rem .35rem;
   font-size: .875em;
-  color: #4ade80;
+  color: #67e8f9;
   font-family: var(--font-mono);
 }
 .prose :where(pre) { background: #09090b !important; border: 1px solid #27272a; border-radius: .5rem; }
-.prose :where(blockquote) { border-left-color: #22c55e; background: rgba(34,197,94,.04); border-radius: 0 .5rem .5rem 0; padding: .75rem 1rem; }
+.prose :where(blockquote) { border-left-color: #22d3ee; background: rgba(34,211,238,.04); border-radius: 0 .5rem .5rem 0; padding: .75rem 1rem; }
 .prose :where(table) { border-collapse: collapse; }
 
 /* ── Tag / Badge ────────────────────────────────────────────── */
@@ -125,8 +127,8 @@ body {
   transition: color .15s, border-color .15s, background .15s;
   text-decoration: none; white-space: nowrap;
 }
-.tag:hover { color: #22c55e; border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.06); }
-.tag.active { color: #22c55e; border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.08); }
+.tag:hover { color: #22d3ee; border-color: rgba(34,211,238,.35); background: rgba(34,211,238,.06); }
+.tag.active { color: #22d3ee; border-color: rgba(34,211,238,.35); background: rgba(34,211,238,.08); }
 
 /* ── Terminal block ─────────────────────────────────────────── */
 .terminal { background: #0a0a0a; border: 1px solid #27272a; border-radius: .5rem; overflow: hidden; }
@@ -135,7 +137,7 @@ body {
 
 /* ── Sticky table of contents ───────────────────────────────── */
 .toc-link { color: #52525b; text-decoration: none; font-size: .8rem; transition: color .15s; display: block; padding: .2rem 0; }
-.toc-link:hover, .toc-link.active { color: #22c55e; }
+.toc-link:hover, .toc-link.active { color: #22d3ee; }
 .toc-link.active { font-weight: 600; }
 
 /* ── Card hover effect ──────────────────────────────────────── */
@@ -143,8 +145,8 @@ body {
   transition: border-color .2s, box-shadow .2s, transform .2s;
 }
 .card-hover:hover {
-  border-color: #27272a !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  border-color: rgba(34,211,238,.2) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(34,211,238,.05);
   transform: translateY(-1px);
 }
 
@@ -154,5 +156,5 @@ body {
   font-size: .7rem;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: #22c55e;
+  color: #22d3ee;
 }

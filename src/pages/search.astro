@@ -81,7 +81,7 @@ const indexJson = JSON.stringify(searchIndex);
           type="search"
           placeholder="Search projects, posts, talks…"
           autofocus
-          class="w-full pl-11 pr-4 py-3 bg-zinc-900 border border-zinc-700 focus:border-emerald-500 rounded-lg text-zinc-100 placeholder:text-zinc-600 text-sm outline-none transition-colors font-mono"
+          class="w-full pl-11 pr-4 py-3 bg-zinc-900 border border-zinc-700 focus:border-cyan-500 rounded-lg text-zinc-100 placeholder:text-zinc-600 text-sm outline-none transition-colors font-mono"
           aria-label="Search"
         />
         <kbd class="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-zinc-600 border border-zinc-700 rounded font-mono">
@@ -130,7 +130,7 @@ const indexJson = JSON.stringify(searchIndex);
 
   const TYPE_COLORS = {
     project:     'bg-blue-500/10 text-blue-400 border-blue-400/25',
-    blog:        'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
+    blog:        'bg-cyan-500/10 text-cyan-400 border-cyan-500/25',
     talk:        'bg-purple-500/10 text-purple-400 border-purple-400/25',
     certificate: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25',
   };
@@ -163,7 +163,7 @@ const indexJson = JSON.stringify(searchIndex);
           ${item.type}
         </span>
         <div class="min-w-0 flex-1">
-          <h3 class="font-medium text-zinc-100 group-hover:text-emerald-400 transition-colors truncate">${item.title}</h3>
+          <h3 class="font-medium text-zinc-100 group-hover:text-cyan-400 transition-colors truncate">${item.title}</h3>
           <p class="text-sm text-zinc-500 mt-0.5 truncate">${item.description}</p>
           ${item.tags?.length ? `<div class="mt-2 flex flex-wrap gap-1.5">${item.tags.slice(0,4).map((t) => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
         </div>

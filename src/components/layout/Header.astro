@@ -23,7 +23,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
   <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
     <!-- Logo -->
     <a href="/" class="shrink-0 flex items-center gap-2 font-mono font-bold text-base">
-      <span class="text-zinc-500">/</span><span class="text-emerald-400">z3roday</span><span class="text-zinc-500">~</span>
+      <span class="text-zinc-500">/</span><span class="text-cyan-400">z3roday</span><span class="text-zinc-500">~</span>
     </a>
 
     <!-- Desktop Nav -->
@@ -34,7 +34,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
           aria-current={isActive(href) ? 'page' : undefined}
           class={`px-3 py-1.5 rounded text-sm transition-colors whitespace-nowrap ${
             isActive(href)
-              ? 'text-emerald-400 bg-emerald-500/8'
+              ? 'text-cyan-400 bg-cyan-500/8'
               : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
           }`}
         >
@@ -60,7 +60,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
         href="/resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded border border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/8 hover:border-emerald-500/40 transition-all font-mono"
+        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded border border-cyan-500/25 text-cyan-400 hover:bg-cyan-500/8 hover:border-cyan-500/40 transition-all font-mono"
       >
         resume<span class="text-zinc-500">↗</span>
       </a>
@@ -95,7 +95,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
           aria-current={isActive(href) ? 'page' : undefined}
           class={`px-3 py-2 rounded text-sm transition-colors ${
             isActive(href)
-              ? 'text-emerald-400 bg-emerald-500/8'
+              ? 'text-cyan-400 bg-cyan-500/8'
               : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
           }`}
         >
@@ -103,7 +103,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
         </a>
       ))}
       <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-        class="mt-1 px-3 py-2 text-sm font-mono font-semibold text-emerald-400 border border-emerald-500/25 rounded hover:bg-emerald-500/8 transition-all w-full text-center">
+        class="mt-1 px-3 py-2 text-sm font-mono font-semibold text-cyan-400 border border-cyan-500/25 rounded hover:bg-cyan-500/8 transition-all w-full text-center">
         resume ↗
       </a>
     </nav>

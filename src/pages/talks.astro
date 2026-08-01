@@ -34,7 +34,7 @@ function youtubeId(url: string): string | null {
                 <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 font-mono mb-3">
                   <time datetime={talk.data.date}>{formatDate(talk.data.date, { year: 'numeric', month: 'short' })}</time>
                   <span class="text-zinc-700">·</span>
-                  <span class="text-emerald-400">{talk.data.event}</span>
+                  <span class="text-cyan-400">{talk.data.event}</span>
                   {talk.data.location && (
                     <>
                       <span class="text-zinc-700">·</span>
@@ -75,7 +75,7 @@ function youtubeId(url: string): string | null {
                   )}
                   {talk.data.video && (
                     <a href={talk.data.video} target="_blank" rel="noopener noreferrer"
-                      class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 rounded text-sm transition-all">
+                      class="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/15 border border-cyan-500/25 text-cyan-400 rounded text-sm transition-all">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                       Watch
                     </a>

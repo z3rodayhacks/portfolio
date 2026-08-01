@@ -10,13 +10,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="terminal-bar">
           <span class="terminal-dot bg-red-500/70"></span>
           <span class="terminal-dot bg-yellow-500/70"></span>
-          <span class="terminal-dot bg-emerald-500/70"></span>
+          <span class="terminal-dot bg-cyan-500/70"></span>
         </div>
         <div class="p-5 font-mono text-sm space-y-1">
-          <p><span class="text-emerald-400">➜</span><span class="text-zinc-500 ml-2">~</span><span class="text-zinc-300 ml-2">curl {Astro.url.pathname}</span></p>
+          <p><span class="text-cyan-400">➜</span><span class="text-zinc-500 ml-2">~</span><span class="text-zinc-300 ml-2">curl {Astro.url.pathname}</span></p>
           <p class="text-red-400">curl: (404) Not Found</p>
           <p class="text-zinc-600">The requested resource could not be located.</p>
-          <p class="text-zinc-500">Status: 404 <span class="cursor-blink text-emerald-400">_</span></p>
+          <p class="text-zinc-500">Status: 404 <span class="cursor-blink text-purple-400">_</span></p>
         </div>
       </div>
 
@@ -24,7 +24,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="text-zinc-400 mb-8">This page doesn't exist or was moved.</p>
 
       <div class="flex flex-wrap gap-3 justify-center">
-        <a href="/" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-semibold rounded text-sm transition-all">
+        <a href="/" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-semibold rounded text-sm transition-all">
           Go Home
         </a>
         <a href="/search" class="px-5 py-2.5 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white rounded text-sm font-medium transition-all">

@@ -41,7 +41,7 @@ const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTa
       {filtered.length === 0 ? (
         <div class="text-center py-20 text-zinc-600 font-mono">
           No posts found for tag "{activeTag}".
-          <a href="/blog" class="block mt-4 text-emerald-400">Clear filter</a>
+          <a href="/blog" class="block mt-4 text-cyan-400">Clear filter</a>
         </div>
       ) : (
         <div class="flex flex-col gap-4">
@@ -61,7 +61,7 @@ const filtered  = activeTag ? sorted.filter((p) => p.data.tags.includes(activeTa
                     <span class="text-zinc-700">·</span>
                     <span>{readingTime(post.body ?? '')} min read</span>
                   </div>
-                  <h2 class="font-semibold text-zinc-100 group-hover:text-emerald-400 transition-colors leading-snug mb-2">
+                  <h2 class="font-semibold text-zinc-100 group-hover:text-cyan-400 transition-colors leading-snug mb-2">
                     {post.data.title}
                   </h2>
                   <p class="text-sm text-zinc-500 leading-relaxed line-clamp-2">{post.data.description}</p>

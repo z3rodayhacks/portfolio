@@ -16,7 +16,7 @@ const RESULT_STYLE: Record<string, string> = {
 function resultStyle(result?: string) {
   if (!result) return '';
   const key = result.toLowerCase().replace(/\s+/g, '-');
-  return RESULT_STYLE[key] ?? 'bg-emerald-500/12 text-emerald-400 border-emerald-500/30';
+  return RESULT_STYLE[key] ?? 'bg-purple-500/12 text-purple-400 border-purple-500/30';
 }
 
 function youtubeId(url: string): string | null {
@@ -53,7 +53,7 @@ function youtubeId(url: string): string | null {
                   <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-600 font-mono mb-3">
                     <time datetime={comp.data.date}>{formatDate(comp.data.date, { year: 'numeric', month: 'short' })}</time>
                     <span class="text-zinc-700">·</span>
-                    <span class="text-emerald-400">{comp.data.event}</span>
+                    <span class="text-cyan-400">{comp.data.event}</span>
                     {comp.data.organizer && <><span class="text-zinc-700">·</span><span>{comp.data.organizer}</span></>}
                     {comp.data.location  && <><span class="text-zinc-700">·</span>
                       <span class="flex items-center gap-1">

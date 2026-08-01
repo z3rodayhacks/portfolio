@@ -23,9 +23,9 @@ const { title, description, date, tags, thumbnail, github, demo, status, techSta
 
       <!-- Breadcrumb -->
       <nav class="mb-8 font-mono text-xs text-zinc-600" aria-label="Breadcrumb">
-        <a href="/" class="hover:text-emerald-400 transition-colors">Home</a>
+        <a href="/" class="hover:text-cyan-400 transition-colors">Home</a>
         <span class="mx-2 text-zinc-700">/</span>
-        <a href="/projects" class="hover:text-emerald-400 transition-colors">Projects</a>
+        <a href="/projects" class="hover:text-cyan-400 transition-colors">Projects</a>
         <span class="mx-2 text-zinc-700">/</span>
         <span class="text-zinc-500 truncate max-w-[20ch] inline-block align-bottom">{title}</span>
       </nav>
@@ -34,7 +34,7 @@ const { title, description, date, tags, thumbnail, github, demo, status, techSta
       <header class="mb-10">
         <div class="flex flex-wrap items-center gap-3 mb-4">
           <span class={`px-2.5 py-1 rounded text-xs font-mono font-semibold ${
-            status === 'completed'   ? 'bg-emerald-500/12 text-emerald-400 border border-emerald-500/25' :
+            status === 'completed'   ? 'bg-cyan-500/12 text-cyan-400 border border-cyan-500/25' :
             status === 'in-progress' ? 'bg-yellow-500/12 text-yellow-400 border border-yellow-500/25' :
                                        'bg-zinc-700/30 text-zinc-500 border border-zinc-700'
           }`}>{status}</span>
@@ -54,7 +54,7 @@ const { title, description, date, tags, thumbnail, github, demo, status, techSta
           )}
           {demo && (
             <a href={demo} target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 rounded text-sm font-semibold transition-all">
+              class="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-zinc-950 rounded text-sm font-semibold transition-all">
               Live Demo ↗
             </a>
           )}
@@ -95,7 +95,7 @@ const { title, description, date, tags, thumbnail, github, demo, status, techSta
 
       <!-- Footer -->
       <div class="mt-16 pt-8 border-t border-zinc-800">
-        <a href="/projects" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-emerald-400 transition-colors font-mono w-fit">
+        <a href="/projects" class="flex items-center gap-2 text-sm text-zinc-500 hover:text-cyan-400 transition-colors font-mono w-fit">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
