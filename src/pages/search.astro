@@ -4,10 +4,11 @@ import { getCollection } from 'astro:content';
 import { formatDate, readingTime } from '../lib/utils';
 
 // Build a search index at build time — static JSON served from the same page
-const projects = await getCollection('projects');
-const posts    = await getCollection('blog', ({ data }) => !data.draft);
-const talks    = await getCollection('talks');
-const certs    = await getCollection('certificates');
+const projects     = await getCollection('projects');
+const posts        = await getCollection('blog', ({ data }) => !data.draft);
+const talks        = await getCollection('talks');
+const certs        = await getCollection('certificates');
+const competitions = await getCollection('competitions');
 
 const searchIndex = [
   ...projects.map((p) => ({
@@ -47,6 +48,15 @@ const searchIndex = [
     date: c.data.date,
     url: `/certificates`,
   })),
+  ...competitions.map((c) => ({
+    type: 'competition',
+    id:   c.id,
+    title: c.data.title,
+    description: `${c.data.event}${c.data.result ? ' — ' + c.data.result : ''}`,
+    tags: c.data.tags,
+    date: c.data.date,
+    url: `/competitions`,
+  })),
 ];
 
 const indexJson = JSON.stringify(searchIndex);
@@ -81,7 +91,7 @@ const indexJson = JSON.stringify(searchIndex);
 
       <!-- Filter buttons -->
       <div class="flex flex-wrap gap-2 mb-6" id="type-filters">
-        {['all', 'project', 'blog', 'talk', 'certificate'].map((t) => (
+        {['all', 'project', 'blog', 'talk', 'certificate', 'competition'].map((t) => (
           <button
             data-filter={t}
             class={`tag cursor-pointer ${t === 'all' ? 'active' : ''}`}

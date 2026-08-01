@@ -95,4 +95,27 @@ const experience = defineCollection({
   }),
 });
 
-export const collections = { projects, blog, talks, certificates, timeline, experience };
+const competitions = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/competitions' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.string(),
+    event: z.string(),
+    organizer: z.string().optional(),
+    location: z.string().optional(),
+    result: z.string().optional(),
+    team: z.string().optional(),
+    teamSize: z.number().optional(),
+    project: z.string().optional(),
+    github: z.string().url().optional(),
+    linkedin: z.string().url().optional(),
+    certificate: z.string().optional(),
+    thumbnail: z.string().optional(),
+    images: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+  }),
+});
+
+export const collections = { projects, blog, talks, certificates, timeline, experience, competitions };

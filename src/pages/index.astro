@@ -25,16 +25,27 @@ const displayProjects = featuredProjects.length > 0
   {displayProjects.length > 0 && <FeaturedProjects projects={displayProjects} />}
   {latestPosts.length > 0     && <LatestPosts posts={latestPosts} />}
 
-  <!-- Certificates teaser -->
+  <!-- Certificates + Competitions teaser -->
   <section class="py-16 px-4 sm:px-6 border-t border-zinc-800/40">
-    <div class="max-w-7xl mx-auto text-center">
-      <p class="section-label mb-3">Credentials</p>
-      <h2 class="text-xl font-bold text-zinc-100 mb-2">Certifications & Achievements</h2>
-      <p class="text-zinc-500 text-sm mb-6">Industry-recognised security certifications and course completions.</p>
-      <a href="/certificates"
-        class="inline-flex items-center gap-2 px-5 py-2.5 border border-zinc-700 hover:border-emerald-500/40 text-zinc-300 hover:text-emerald-400 rounded text-sm font-medium transition-all">
-        View All Certificates →
-      </a>
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="p-6 bg-zinc-900/40 border border-zinc-800 rounded-lg text-center hover:border-zinc-700 transition-colors">
+          <p class="section-label mb-2">Credentials</p>
+          <h2 class="text-lg font-bold text-zinc-100 mb-2">Certifications</h2>
+          <p class="text-zinc-500 text-sm mb-5">Industry-recognised security certifications and course completions.</p>
+          <a href="/certificates" class="inline-flex items-center gap-2 px-4 py-2 border border-zinc-700 hover:border-emerald-500/40 text-zinc-300 hover:text-emerald-400 rounded text-sm font-medium transition-all">
+            View Certificates →
+          </a>
+        </div>
+        <div class="p-6 bg-zinc-900/40 border border-zinc-800 rounded-lg text-center hover:border-zinc-700 transition-colors">
+          <p class="section-label mb-2">Competing</p>
+          <h2 class="text-lg font-bold text-zinc-100 mb-2">Competitions</h2>
+          <p class="text-zinc-500 text-sm mb-5">Hackathons, CTFs, and cybersecurity challenges.</p>
+          <a href="/competitions" class="inline-flex items-center gap-2 px-4 py-2 border border-zinc-700 hover:border-emerald-500/40 text-zinc-300 hover:text-emerald-400 rounded text-sm font-medium transition-all">
+            View Competitions →
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
