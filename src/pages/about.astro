@@ -7,12 +7,36 @@ const experience  = await getCollection('experience');
 const sortedExp   = experience.sort((a, b) => b.data.order - a.data.order);
 const allCerts    = await getCollection('certificates');
 
-const skills = {
-  'Offensive Security':  ['Penetration Testing', 'Vulnerability Research', 'Exploit Development', 'CTF', 'OSINT'],
-  'Malware & Forensics': ['Malware Analysis', 'Reverse Engineering', 'Dark Web Research', 'Incident Response', 'DFIR'],
-  'Network Security':    ['Network Security', 'Cisco', 'Wireshark', 'IDS/IPS', 'Traffic Analysis'],
-  'Development':         ['Python', 'Bash', 'JavaScript', 'Security Tooling', 'Automation'],
-};
+const skills = [
+  {
+    category: 'Offensive Security',
+    icon: '⚔',
+    color: 'text-red-400 border-red-400/20 bg-red-400/5',
+    dot: 'bg-red-400',
+    items: ['Penetration Testing', 'Vulnerability Research', 'Exploit Development', 'CTF', 'OSINT'],
+  },
+  {
+    category: 'Malware & Forensics',
+    icon: '🦠',
+    color: 'text-purple-400 border-purple-400/20 bg-purple-400/5',
+    dot: 'bg-purple-400',
+    items: ['Malware Analysis', 'Reverse Engineering', 'Dark Web Research', 'Incident Response', 'DFIR'],
+  },
+  {
+    category: 'Network Security',
+    icon: '🌐',
+    color: 'text-blue-400 border-blue-400/20 bg-blue-400/5',
+    dot: 'bg-blue-400',
+    items: ['Network Security', 'Cisco', 'Wireshark', 'IDS/IPS', 'Traffic Analysis'],
+  },
+  {
+    category: 'Development',
+    icon: '⌨',
+    color: 'text-cyan-400 border-cyan-400/20 bg-cyan-400/5',
+    dot: 'bg-cyan-400',
+    items: ['Python', 'Bash', 'JavaScript', 'Security Tooling', 'Automation'],
+  },
+];
 ---
 
 <BaseLayout title="About - Cybersecurity Portfolio" description="Learn more about my background, skills, experience, and approach to security.">
@@ -68,12 +92,16 @@ const skills = {
         <p class="section-label mb-3">Technical expertise</p>
         <h2 id="skills-heading" class="text-2xl font-bold text-zinc-100 mb-8">Skills & Tools</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {Object.entries(skills).map(([category, items]) => (
-            <div class="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-              <h3 class="font-mono text-xs text-cyan-400 font-semibold uppercase tracking-wider mb-3">{category}</h3>
+          {skills.map(({ category, icon, color, dot, items }) => (
+            <div class={`p-5 border rounded-lg ${color}`}>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="text-lg" aria-hidden="true">{icon}</span>
+                <h3 class="font-mono text-xs font-semibold uppercase tracking-wider">{category}</h3>
+              </div>
               <div class="flex flex-wrap gap-2">
                 {items.map((skill) => (
-                  <span class="px-2.5 py-1 bg-zinc-800/80 border border-zinc-700/50 rounded text-xs text-zinc-300 font-mono">
+                  <span class="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900/80 border border-zinc-700/40 rounded text-xs text-zinc-300 font-mono">
+                    <span class={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`}></span>
                     {skill}
                   </span>
                 ))}

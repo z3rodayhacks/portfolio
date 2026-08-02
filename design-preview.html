@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Preview — z3roday Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #050608;
+      --surface:    #080a0d;
+      --card:       rgba(255,255,255,0.03);
+      --border:     rgba(255,255,255,0.08);
+      --border-2:   rgba(255,255,255,0.13);
+      --text:       #F5F5F5;
+      --text-2:     #A0A7B4;
+      --accent:     #4DA3FF;
+      --accent-glow: rgba(77,163,255,0.18);
+      --font-sans:  'Inter', system-ui, sans-serif;
+      --font-mono:  'IBM Plex Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; color-scheme: dark; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: rgba(77,163,255,0.2); color: var(--text); }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    /* ── Layout ──────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      height: 56px;
+      display: flex; align-items: center;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s;
+    }
+    header.scrolled {
+      background: rgba(5,6,8,0.88);
+      backdrop-filter: blur(20px) saturate(1.8);
+      border-bottom-color: rgba(255,255,255,0.07);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .logo { font-family: var(--font-mono); font-weight: 700; font-size: 14px; text-decoration: none; display: flex; gap: 2px; }
+    .logo-slash { color: rgba(160,167,180,0.5); }
+    .logo-name { color: var(--accent); }
+    nav { display: flex; align-items: center; gap: 2px; }
+    nav a {
+      padding: 6px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; color: var(--text-2);
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+    nav a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    nav a.active { color: var(--accent); background: rgba(77,163,255,0.08); }
+    .header-resume {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      color: var(--accent); text-decoration: none;
+      padding: 6px 12px; border-radius: 6px;
+      border: 1px solid rgba(77,163,255,0.22);
+      transition: background 0.15s;
+      letter-spacing: 0.03em;
+    }
+    .header-resume:hover { background: rgba(77,163,255,0.07); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: calc(100vh - 56px);
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+    #hero-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    .hero-overlays {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 90% 70% at 15% 50%, rgba(77,163,255,0.07) 0%, transparent 65%);
+    }
+    .hero-fade-x {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #050608 0%, transparent 40%, rgba(5,6,8,0.6) 100%);
+    }
+    .hero-fade-b {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 160px;
+      background: linear-gradient(to top, #050608, transparent);
+    }
+    .hero-content {
+      position: relative; z-index: 10;
+      width: 100%; padding: 112px 24px;
+    }
+    .hero-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 80px; align-items: center;
+    }
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-video-col { display: none; }
+    }
+
+    /* Hero text elements */
+    .hero-el {
+      opacity: 0; transform: translateY(22px);
+      animation: heroIn 0.75s cubic-bezier(0.16,1,0.3,1) var(--d, 0ms) forwards;
+    }
+    @keyframes heroIn { to { opacity:1; transform:none; } }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
+    }
+    .hero-eyebrow-line {
+      width: 32px; height: 1px; background: var(--accent); flex-shrink: 0;
+    }
+    .hero-eyebrow-text {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
+    }
+    h1.hero-name {
+      font-weight: 700; line-height: 0.9; margin-bottom: 24px;
+    }
+    h1.hero-name .name-line {
+      display: block; font-size: clamp(48px, 7.5vw, 92px); color: var(--text);
+    }
+    h1.hero-name .name-accent {
+      display: block;
+      font-size: clamp(36px, 5.5vw, 68px);
+      background: linear-gradient(90deg, #4DA3FF 0%, #93c9ff 50%, rgba(77,163,255,0.4) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-role {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 17px; color: var(--text-2);
+      margin-bottom: 32px;
+    }
+    .hero-cursor {
+      width: 2px; height: 1.1em;
+      background: var(--accent); display: inline-block; vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .hero-desc {
+      max-width: 520px; font-size: 15px; color: rgba(160,167,180,0.85);
+      line-height: 1.8; margin-bottom: 48px;
+    }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 64px; }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px; border-radius: 8px;
+      background: var(--accent); color: #050608;
+      font-weight: 600; font-size: 13px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover {
+      background: #6bbaff;
+      box-shadow: 0 0 32px rgba(77,163,255,0.4);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px; border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text); font-weight: 500; font-size: 13px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(77,163,255,0.35); color: var(--accent);
+      background: rgba(77,163,255,0.06);
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center;
+      padding: 11px 22px; border-radius: 8px;
+      color: var(--text-2); font-size: 13px;
+      text-decoration: none; cursor: pointer;
+      border: 1px solid transparent;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text); }
+
+    /* Hero stats */
+    .hero-stats { display: flex; flex-wrap: wrap; gap: 32px; }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat-value { font-size: 28px; font-weight: 700; font-family: var(--font-mono); color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 11px; color: var(--text-2); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Hero video panel */
+    .hero-video-col { display: flex; justify-content: flex-end; align-items: center; }
+    .video-wrapper { position: relative; }
+    .video-glow {
+      position: absolute; inset: -40px; border-radius: 24px; pointer-events: none;
+      background: radial-gradient(circle, rgba(77,163,255,0.08) 0%, transparent 70%);
+    }
+    .video-frame {
+      position: relative; width: 320px; border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(77,163,255,0.14);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .video-titlebar {
+      display: flex; align-items: center; gap: 6px; padding: 12px 16px;
+      background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.12); }
+    .titlebar-label { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: rgba(160,167,180,0.4); }
+    .video-container { position: relative; aspect-ratio: 16/9; background: #080a0d; }
+    .video-container video, .video-placeholder { width: 100%; height: 100%; object-fit: cover; opacity: 0.72; }
+    .video-placeholder {
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(77,163,255,0.05), rgba(5,6,8,0.9));
+    }
+    .video-placeholder-icon { color: rgba(77,163,255,0.3); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; }
+    .video-overlay-gradient {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to bottom, transparent 55%, rgba(5,6,8,0.92)), linear-gradient(to right, rgba(5,6,8,0.2), transparent);
+    }
+    .video-blue-tint {
+      position: absolute; inset: 0; pointer-events: none;
+      background: rgba(77,163,255,0.05);
+    }
+    .video-caption {
+      display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+      background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .caption-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .caption-text { font-family: var(--font-mono); font-size: 10px; color: rgba(160,167,180,0.4); letter-spacing: 0.1em; }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      width: 1px; height: 56px;
+      background: linear-gradient(to bottom, rgba(77,163,255,0.5), transparent);
+      animation: scrollAnim 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0% { opacity:0; transform: translateX(-50%) scaleY(0.3); transform-origin:top; }
+      45% { opacity:1; transform: translateX(-50%) scaleY(1); }
+      100% { opacity:0; transform: translateX(-50%) scaleY(1); }
+    }
+
+    /* ── Sections ─────────────────────────────────────────────── */
+    section { padding: 96px 0; }
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px;
+    }
+    .section-label {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .section-title { font-size: clamp(22px, 3vw, 28px); font-weight: 700; color: var(--text); }
+    .section-link {
+      font-family: var(--font-mono); font-size: 13px; color: rgba(160,167,180,0.6);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .section-link:hover { color: var(--accent); }
+    .sep { border: none; border-top: 1px solid rgba(255,255,255,0.05); }
+
+    /* ── Cards ────────────────────────────────────────────────── */
+    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .card-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 640px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      display: flex; flex-direction: column;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      position: relative;
+    }
+    .card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 12px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(77,163,255,0.06), transparent);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none;
+    }
+    .card:hover { border-color: rgba(77,163,255,0.22); box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(77,163,255,0.06); transform: translateY(-2px); }
+    .card:hover::before { opacity: 1; }
+
+    .card-thumb {
+      height: 176px; overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-thumb img { width:100%; height:100%; object-fit:cover; opacity:0.7; transition: opacity 0.4s, transform 0.5s; }
+    .card:hover .card-thumb img { opacity: 0.9; transform: scale(1.04); }
+    .card-thumb-placeholder { color: rgba(160,167,180,0.2); font-family: var(--font-mono); font-size: 12px; }
+
+    .card-body { flex: 1; display: flex; flex-direction: column; padding: 20px; }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text); transition: color 0.15s; line-height: 1.35; }
+    .card:hover .card-title { color: var(--accent); }
+    .card-badge {
+      flex-shrink: 0; padding: 2px 8px; border-radius: 4px;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+      color: var(--accent); background: rgba(77,163,255,0.1);
+    }
+    .card-desc { font-size: 13px; color: rgba(160,167,180,0.7); line-height: 1.65; flex: 1; margin-bottom: 16px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      border-radius: 4px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03); color: var(--text-2);
+    }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06);
+      font-family: var(--font-mono); font-size: 11px; color: rgba(160,167,180,0.4);
+    }
+    .card-arrow { color: var(--accent); transition: transform 0.2s; }
+    .card:hover .card-arrow { transform: translateX(4px); }
+
+    /* Blog card (no image) */
+    .blog-card { background: rgba(255,255,255,0.025); }
+    .blog-meta { font-family:var(--font-mono); font-size:11px; color:rgba(160,167,180,0.45); display:flex; justify-content:space-between; margin-bottom:12px; }
+
+    /* ── Stat strip ──────────────────────────────────────────── */
+    .stat-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; margin: 40px 0; overflow: hidden; border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    @media (max-width: 640px) { .stat-strip { grid-template-columns: repeat(2,1fr); } }
+    .stat-strip-item {
+      padding: 24px; background: rgba(255,255,255,0.025);
+      text-align: center;
+    }
+    .strip-value { font-size: 32px; font-weight: 700; font-family:var(--font-mono); color:var(--accent); line-height:1; }
+    .strip-label { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+
+    /* ── Design tokens preview ───────────────────────────────── */
+    .tokens-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .token-chip {
+      border-radius: 8px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .token-swatch { height: 48px; }
+    .token-info { padding: 8px 12px; font-family:var(--font-mono); font-size:10px; color:var(--text-2); }
+
+    /* ── Skill badges ────────────────────────────────────────── */
+    .skills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .skill {
+      padding: 6px 14px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--card);
+      font-size: 13px; color: var(--text-2);
+      transition: all 0.2s;
+    }
+    .skill:hover { border-color: rgba(77,163,255,0.3); color: var(--accent); background: rgba(77,163,255,0.05); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: rgba(5,6,8,0.9);
+      padding: 56px 0 32px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    @media (max-width:768px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand p { margin-top: 12px; font-size: 13px; color: rgba(160,167,180,0.55); line-height: 1.65; max-width: 280px; }
+    .footer-socials { display: flex; gap: 8px; margin-top: 20px; }
+    .social-btn {
+      width: 32px; height: 32px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(160,167,180,0.5); text-decoration: none; font-size: 10px;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { color: var(--accent); border-color: rgba(77,163,255,0.25); background: rgba(77,163,255,0.06); }
+    .footer-nav h4, .footer-status h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+    .footer-nav ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-nav a { font-size: 13px; color: rgba(160,167,180,0.55); text-decoration: none; transition: color 0.15s; }
+    .footer-nav a:hover { color: var(--accent); }
+    .status-row { display: flex; align-items: center; gap: 8px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    .status-text { font-size: 13px; color: rgba(160,167,180,0.65); }
+    .footer-bottom {
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--font-mono); font-size: 11px; color: rgba(160,167,180,0.35);
+      flex-wrap: wrap; gap: 8px;
+    }
+    .footer-bottom a { color: inherit; text-decoration: none; transition: color 0.15s; margin-left: 20px; }
+    .footer-bottom a:hover { color: var(--accent); }
+
+    /* ── Reveal animation ────────────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+
+    /* ── Preview banner ──────────────────────────────────────── */
+    .preview-banner {
+      position: fixed; bottom: 16px; right: 16px; z-index: 1000;
+      background: rgba(77,163,255,0.12); border: 1px solid rgba(77,163,255,0.3);
+      backdrop-filter: blur(12px); border-radius: 8px;
+      padding: 8px 14px; font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <header id="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <span class="logo-slash">/</span><span class="logo-name">z3roday</span><span class="logo-slash">~</span>
+      </a>
+      <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#">About</a>
+        <a href="#">Projects</a>
+        <a href="#">Blog</a>
+        <a href="#">Talks</a>
+        <a href="#">Contact</a>
+      </nav>
+      <a href="#" class="header-resume">resume ↗</a>
+    </div>
+  </header>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section id="hero">
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="hero-overlays">
+      <div class="hero-glow"></div>
+      <div class="hero-fade-x"></div>
+      <div class="hero-fade-b"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-grid">
+
+        <!-- Left -->
+        <div>
+          <div class="hero-eyebrow hero-el" style="--d:0ms">
+            <div class="hero-eyebrow-line"></div>
+            <span class="hero-eyebrow-text">Security Researcher · Coimbatore, India</span>
+          </div>
+
+          <h1 class="hero-name hero-el" style="--d:80ms">
+            <span class="name-line">Jashwanth</span>
+            <span class="name-line">Raghav</span>
+            <span class="name-accent">R&nbsp;K</span>
+          </h1>
+
+          <div class="hero-role hero-el" style="--d:160ms">
+            <span id="role-text"></span>
+            <span class="hero-cursor"></span>
+          </div>
+
+          <p class="hero-desc hero-el" style="--d:240ms">
+            Offensive security professional specializing in malware analysis,
+            reverse engineering, and adversarial research. OWASP SREC Chairman &middot;
+            DCG91422 Member &middot; IEEE Treasurer.
+          </p>
+
+          <div class="hero-ctas hero-el" style="--d:320ms">
+            <a href="#projects" class="btn-primary">
+              View Projects
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#" class="btn-secondary">About Me</a>
+            <a href="#blog" class="btn-ghost">Read Blog</a>
+          </div>
+
+          <div class="hero-stats hero-el" style="--d:400ms">
+            <div class="stat">
+              <span class="stat-value">10+</span>
+              <span class="stat-label">CTF Wins</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">5+</span>
+              <span class="stat-label">Certifications</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">8+</span>
+              <span class="stat-label">Hackathons</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">3</span>
+              <span class="stat-label">Community Roles</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Video panel -->
+        <div class="hero-video-col hero-el" style="--d:200ms">
+          <div class="video-wrapper">
+            <div class="video-glow"></div>
+            <div class="video-frame">
+              <div class="video-titlebar">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <span class="titlebar-label">research.mp4</span>
+              </div>
+              <div class="video-container">
+                <!-- Try loading video from the Astro dev server -->
+                <video src="/sec.mp4" autoplay loop muted playsinline
+                       onerror="this.style.display='none'; document.getElementById('video-fallback').style.display='flex'"></video>
+                <div id="video-fallback" class="video-placeholder" style="display:none; position:absolute; inset:0;">
+                  <span class="video-placeholder-icon">▶ SECURITY FOOTAGE</span>
+                </div>
+                <div class="video-overlay-gradient"></div>
+                <div class="video-blue-tint"></div>
+              </div>
+              <div class="video-caption">
+                <div class="caption-dot"></div>
+                <span class="caption-text">SECURITY RESEARCH</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="scroll-indicator"></div>
+  </section>
+
+  <!-- ── Stats Strip ─────────────────────────────────────────── -->
+  <div class="container">
+    <div class="stat-strip reveal">
+      <div class="stat-strip-item">
+        <div class="strip-value">10+</div>
+        <div class="strip-label">CTF Competitions</div>
+      </div>
+      <div class="stat-strip-item">
+        <div class="strip-value">5+</div>
+        <div class="strip-label">Certifications</div>
+      </div>
+      <div class="stat-strip-item">
+        <div class="strip-value">8+</div>
+        <div class="strip-label">Hackathons</div>
+      </div>
+      <div class="stat-strip-item">
+        <div class="strip-value">3</div>
+        <div class="strip-label">Community Roles</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Featured Projects ───────────────────────────────────── -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="section-label">Selected work</p>
+          <h2 class="section-title">Featured Projects</h2>
+        </div>
+        <a href="#" class="section-link">all projects →</a>
+      </div>
+
+      <div class="card-grid">
+        <!-- Project 1 -->
+        <a href="#" class="card reveal reveal-d1">
+          <div class="card-thumb">
+            <div class="card-thumb-placeholder">[ PROJECT THUMBNAIL ]</div>
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-title">Malware Analysis Framework</span>
+              <span class="card-badge">completed</span>
+            </div>
+            <p class="card-desc">
+              Automated sandbox environment for behavioral analysis of Windows malware samples.
+              Integrates YARA rules and dynamic instrumentation.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Python</span>
+              <span class="tag">YARA</span>
+              <span class="tag">Frida</span>
+              <span class="tag">Malware</span>
+            </div>
+            <div class="card-footer">
+              <span>Jan 2025</span>
+              <span class="card-arrow">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 2 -->
+        <a href="#" class="card reveal reveal-d2">
+          <div class="card-thumb">
+            <div class="card-thumb-placeholder">[ PROJECT THUMBNAIL ]</div>
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-title">Dark Web OSINT Toolkit</span>
+              <span class="card-badge" style="color:#f59e0b; background:rgba(245,158,11,0.1);">in-progress</span>
+            </div>
+            <p class="card-desc">
+              Tor-based intelligence gathering tool for monitoring threat actor activity
+              and tracking compromised credential markets.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Tor</span>
+              <span class="tag">Python</span>
+              <span class="tag">OSINT</span>
+            </div>
+            <div class="card-footer">
+              <span>Mar 2025</span>
+              <span class="card-arrow">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 3 -->
+        <a href="#" class="card reveal reveal-d3">
+          <div class="card-thumb">
+            <div class="card-thumb-placeholder">[ PROJECT THUMBNAIL ]</div>
+          </div>
+          <div class="card-body">
+            <div class="card-header">
+              <span class="card-title">Red Team C2 Research</span>
+              <span class="card-badge">completed</span>
+            </div>
+            <p class="card-desc">
+              Research into modern command & control infrastructure detection
+              techniques and behavioral fingerprinting methods.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Red Team</span>
+              <span class="tag">Network</span>
+              <span class="tag">Detection</span>
+            </div>
+            <div class="card-footer">
+              <span>Nov 2024</span>
+              <span class="card-arrow">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="sep" />
+
+  <!-- ── Latest Blog Posts ──────────────────────────────────── -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="section-label">From the blog</p>
+          <h2 class="section-title">Latest Articles</h2>
+        </div>
+        <a href="#" class="section-link">all posts →</a>
+      </div>
+
+      <div class="card-grid">
+        <a href="#" class="card blog-card reveal reveal-d1">
+          <div class="card-body" style="padding-top:20px;">
+            <div class="blog-meta">
+              <time>Aug 2025</time>
+              <span>8 min read</span>
+            </div>
+            <span class="card-title" style="display:block; margin-bottom:10px;">
+              Reverse Engineering Modern Ransomware Loaders
+            </span>
+            <p class="card-desc">
+              An in-depth analysis of packer techniques used by modern ransomware families,
+              including anti-debug tricks and control flow obfuscation.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Malware</span>
+              <span class="tag">Reverse Eng</span>
+              <span class="tag">Research</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="card blog-card reveal reveal-d2">
+          <div class="card-body" style="padding-top:20px;">
+            <div class="blog-meta">
+              <time>Jul 2025</time>
+              <span>6 min read</span>
+            </div>
+            <span class="card-title" style="display:block; margin-bottom:10px;">
+              CTF Writeup: Exploiting a Custom PRNG
+            </span>
+            <p class="card-desc">
+              Walkthrough of a creative cryptography challenge involving a flawed
+              pseudo-random number generator with predictable state.
+            </p>
+            <div class="card-tags">
+              <span class="tag">CTF</span>
+              <span class="tag">Crypto</span>
+              <span class="tag">Python</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="card blog-card reveal reveal-d3">
+          <div class="card-body" style="padding-top:20px;">
+            <div class="blog-meta">
+              <time>Jun 2025</time>
+              <span>5 min read</span>
+            </div>
+            <span class="card-title" style="display:block; margin-bottom:10px;">
+              Building a Threat Intelligence Pipeline
+            </span>
+            <p class="card-desc">
+              How to automate collection, normalization, and enrichment of threat
+              intelligence feeds using open-source tooling and Python.
+            </p>
+            <div class="card-tags">
+              <span class="tag">TI</span>
+              <span class="tag">OSINT</span>
+              <span class="tag">Automation</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="sep" />
+
+  <!-- ── Skills & Tools ─────────────────────────────────────── -->
+  <section>
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="section-label">Expertise</p>
+          <h2 class="section-title">Skills &amp; Tools</h2>
+        </div>
+      </div>
+      <div class="skills reveal">
+        {['Malware Analysis','Reverse Engineering','Network Security','Penetration Testing','OSINT','Dark Web Research','Python','Frida','IDA Pro','Wireshark','Burp Suite','Metasploit','YARA','CTF','Red Teaming','Vulnerability Research'].map(s =>
+          `<span class="skill">${s}</span>`
+        ).join('')}
+      </div>
+    </div>
+  </section>
+
+  <hr class="sep" />
+
+  <!-- ── Design Token Preview ───────────────────────────────── -->
+  <section>
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <p class="section-label">Design System</p>
+          <h2 class="section-title">Color Tokens</h2>
+        </div>
+      </div>
+      <div class="tokens-grid reveal">
+        <div class="token-chip">
+          <div class="token-swatch" style="background:#050608;border-bottom:1px solid rgba(255,255,255,0.08)"></div>
+          <div class="token-info">--bg<br>#050608</div>
+        </div>
+        <div class="token-chip">
+          <div class="token-swatch" style="background:rgba(255,255,255,0.03)"></div>
+          <div class="token-info">--card<br>rgba(255,255,255,0.03)</div>
+        </div>
+        <div class="token-chip">
+          <div class="token-swatch" style="background:#4DA3FF"></div>
+          <div class="token-info">--accent<br>#4DA3FF</div>
+        </div>
+        <div class="token-chip">
+          <div class="token-swatch" style="background:rgba(77,163,255,0.18)"></div>
+          <div class="token-info">--accent-glow<br>rgba(77,163,255,0.18)</div>
+        </div>
+        <div class="token-chip">
+          <div class="token-swatch" style="background:#F5F5F5"></div>
+          <div class="token-info">--text<br>#F5F5F5</div>
+        </div>
+        <div class="token-chip">
+          <div class="token-swatch" style="background:#A0A7B4"></div>
+          <div class="token-info">--text-2<br>#A0A7B4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <span class="logo-slash">/</span><span class="logo-name">z3roday</span><span class="logo-slash">~</span>
+          </a>
+          <p>Cybersecurity professional building secure systems, writing about security research, and sharing knowledge with the community.</p>
+          <div class="footer-socials">
+            <a href="#" class="social-btn" title="GitHub">GH</a>
+            <a href="#" class="social-btn" title="LinkedIn">IN</a>
+            <a href="#" class="social-btn" title="RSS">RSS</a>
+          </div>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Talks</a></li>
+            <li><a href="#">Certs</a></li>
+            <li><a href="#">Timeline</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-status">
+          <h4>Status</h4>
+          <div class="status-row">
+            <span class="status-dot"></span>
+            <span class="status-text">Available for opportunities</span>
+          </div>
+          <p style="font-family:var(--font-mono);font-size:11px;color:rgba(160,167,180,0.35);margin-top:12px;">
+            Built with Astro · Hosted on Cloudflare
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 — All rights reserved</span>
+        <div>
+          <a href="#">sitemap</a>
+          <a href="#">rss</a>
+          <a href="#">robots.txt</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Preview badge -->
+  <div class="preview-banner">DESIGN PREVIEW</div>
+
+  <script>
+    /* ── Header scroll effect ─────────────────────────────── */
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header?.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    /* ── Scroll reveal ────────────────────────────────────── */
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      }),
+      { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Skills (generated inline) ────────────────────────── */
+    const skillsDiv = document.querySelector('.skills');
+    if (skillsDiv && skillsDiv.innerHTML.includes('{[')) {
+      const items = ['Malware Analysis','Reverse Engineering','Network Security','Penetration Testing','OSINT','Dark Web Research','Python','Frida','IDA Pro','Wireshark','Burp Suite','Metasploit','YARA','CTF','Red Teaming','Vulnerability Research'];
+      skillsDiv.innerHTML = items.map(s => `<span class="skill">${s}</span>`).join('');
+    }
+
+    /* ── Particle System ──────────────────────────────────── */
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    const ACC = { r: 77, g: 163, b: 255 };
+    let W, H, particles = [], mouse = { x: -9999, y: -9999 }, rafId;
+
+    const resize = () => {
+      W = canvas.offsetWidth; H = canvas.offsetHeight;
+      canvas.width = W; canvas.height = H;
+    };
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W; this.y = Math.random() * H;
+        this.vx = (Math.random() - 0.5) * 0.22; this.vy = (Math.random() - 0.5) * 0.22;
+        this.r = Math.random() * 1.1 + 0.3;
+        this.a = Math.random() * 0.4 + 0.12; this.base = this.a;
+      }
+      tick() {
+        const dx = this.x - mouse.x, dy = this.y - mouse.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < 18000) {
+          const d = Math.sqrt(d2), f = (135 - d) / 135 * 0.012;
+          this.vx += (dx / d) * f; this.vy += (dy / d) * f;
+          this.a = Math.min(0.85, this.base + (1 - d / 135) * 0.45);
+        } else { this.a += (this.base - this.a) * 0.04; }
+        this.vx += (Math.random() - 0.5) * 0.007; this.vy += (Math.random() - 0.5) * 0.007;
+        this.vx *= 0.988; this.vy *= 0.988;
+        const spd = Math.hypot(this.vx, this.vy);
+        if (spd > 0.85) { const s = 0.85 / spd; this.vx *= s; this.vy *= s; }
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < -4) this.x = W + 4; if (this.x > W + 4) this.x = -4;
+        if (this.y < -4) this.y = H + 4; if (this.y > H + 4) this.y = -4;
+      }
+      draw() {
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${ACC.r},${ACC.g},${ACC.b},${this.a.toFixed(2)})`; ctx.fill();
+      }
+    }
+
+    const MAX_D = 145, MAX_D2 = MAX_D * MAX_D;
+    const frame = () => {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length - 1; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < MAX_D2) {
+            const t = 1 - d2 / MAX_D2;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(${ACC.r},${ACC.g},${ACC.b},${(t * 0.11).toFixed(3)})`;
+            ctx.lineWidth = t * 0.65; ctx.stroke();
+          }
+        }
+      }
+      particles.forEach(p => { p.tick(); p.draw(); });
+      rafId = requestAnimationFrame(frame);
+    };
+
+    const init = () => {
+      resize();
+      const n = Math.min(Math.floor((W * H) / 7200), 160);
+      particles = Array.from({ length: n }, () => new Particle());
+    };
+
+    window.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { cancelAnimationFrame(rafId); init(); frame(); }, 150);
+    }, { passive: true });
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) { init(); frame(); }
+
+    /* ── Typewriter ────────────────────────────────────────── */
+    const roles = ['Security Consultant','Malware Researcher','OWASP SREC Chairman','Ethical Hacker','CTF Player','Dark Web Researcher'];
+    const el = document.getElementById('role-text');
+    if (el) {
+      let i = 0, j = 0, del = false;
+      const tick = () => {
+        const cur = roles[i % roles.length];
+        el.textContent = del ? cur.slice(0, j--) : cur.slice(0, j++);
+        if (!del && j > cur.length) { del = true; setTimeout(tick, 1800); return; }
+        if (del && j < 0) { del = false; i++; j = 0; setTimeout(tick, 350); return; }
+        setTimeout(tick, del ? 48 : 85);
+      };
+      setTimeout(tick, 900);
+    }
+  </script>
+</body>
+</html>

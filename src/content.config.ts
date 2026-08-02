@@ -111,6 +111,7 @@ const competitions = defineCollection({
     github: z.string().url().optional(),
     linkedin: z.string().url().optional(),
     certificate: z.string().optional(),
+    video: z.string().url().optional(),
     thumbnail: z.string().optional(),
     images: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),
