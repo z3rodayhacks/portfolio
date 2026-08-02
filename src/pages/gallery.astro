@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import galleryData from '../../public/gallery-index.json';
 
 interface GalleryImage {
   src: string;
@@ -7,40 +8,40 @@ interface GalleryImage {
   caption?: string;
 }
 
-let images: GalleryImage[] = [];
-try {
-  const res = await fetch(
-    new URL('/gallery-index.json', Astro.site ?? 'http://localhost:4321').toString()
-  ).catch(() => null);
-  if (res?.ok) images = await res.json();
-} catch { /* no gallery index yet */ }
-
+const images = galleryData as GalleryImage[];
 const siteUrl = (Astro.site ?? 'http://localhost:4321').toString().replace(/\/$/, '');
 
-// JSON-LD structured data for Google image indexing
+const person = {
+  "@type": "Person",
+  "name": "Jashwanth Raghav R K",
+  "alternateName": "Jashwanth Raghav",
+  "url": siteUrl,
+  "image": `${siteUrl}/profile/photo.jpg`,
+  "sameAs": [
+    "https://www.linkedin.com/in/jashwanth-raghav-5a9111313/",
+    "https://github.com/z3rodayhacks",
+    "https://medium.com/@rkjashwanthraghav01"
+  ]
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ImageGallery",
-  "name": "Jashwanth Raghav - Photo Gallery",
-  "description": "Photos of Jashwanth Raghav at cybersecurity competitions, conference talks, hackathons, and community events.",
-  "author": {
-    "@type": "Person",
-    "name": "Jashwanth Raghav",
-    "url": siteUrl,
-    "sameAs": [
-      "https://www.linkedin.com/in/jashwanth-raghav-5a9111313/",
-      "https://github.com/z3rodayhacks"
-    ]
-  },
-  "image": images.map(img => ({
+  "name": "Jashwanth Raghav — Cybersecurity Competitions, Talks & Events",
+  "description": "Photos of Jashwanth Raghav at cybersecurity competitions, CTF events, conference talks, hackathons, and community events across India.",
+  "url": `${siteUrl}/gallery/`,
+  "author": person,
+  "image": images.map((img, i) => ({
     "@type": "ImageObject",
     "contentUrl": `${siteUrl}${img.src}`,
+    "url": `${siteUrl}/gallery/`,
     "name": img.alt,
     "description": img.caption ?? img.alt,
-    "author": {
-      "@type": "Person",
-      "name": "Jashwanth Raghav"
-    }
+    "keywords": "Jashwanth Raghav, cybersecurity, OWASP SREC, z3rodayhacks, " + img.alt,
+    "creator": person,
+    "copyrightHolder": person,
+    "representativeOfPage": i === 0,
+    "encodingFormat": img.src.endsWith('.png') ? 'image/png' : 'image/jpeg',
   }))
 };
 ---

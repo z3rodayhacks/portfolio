@@ -7,6 +7,7 @@ export async function GET(context: APIContext) {
     'Allow: /',
     '',
     `Sitemap: ${siteUrl}/sitemap-index.xml`,
+    `Sitemap: ${siteUrl}/image-sitemap.xml`,
   ].join('\n');
 
   return new Response(body, {

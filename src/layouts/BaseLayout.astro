@@ -64,6 +64,29 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
     <meta name="author" content="Jashwanth Raghav R K" />
     <title>{title}</title>
+
+    <!-- Person schema — tells Google these pages belong to Jashwanth Raghav -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jashwanth Raghav R K",
+      "alternateName": ["Jashwanth Raghav", "z3rodayhacks"],
+      "url": canonicalURL.origin,
+      "image": `${canonicalURL.origin}/profile/photo.jpg`,
+      "jobTitle": "Cybersecurity Researcher & Security Consultant",
+      "description": "Cybersecurity Researcher and Security Consultant, OWASP SREC Chairman, malware analyst, CTF player, and dark web researcher based in Coimbatore, India.",
+      "sameAs": [
+        "https://www.linkedin.com/in/jashwanth-raghav-5a9111313/",
+        "https://github.com/z3rodayhacks",
+        "https://medium.com/@rkjashwanthraghav01"
+      ],
+      "worksFor": { "@type": "Organization", "name": "TechGuard Labs" },
+      "knowsAbout": [
+        "Cybersecurity", "Penetration Testing", "Malware Analysis",
+        "CTF", "Reverse Engineering", "Dark Web Research", "OSINT",
+        "Network Security", "Incident Response"
+      ]
+    })} />
   </head>
   <body class={`min-h-screen flex flex-col bg-[#050505] text-zinc-100 ${className}`}>
     <Header />
