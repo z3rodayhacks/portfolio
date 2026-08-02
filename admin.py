@@ -291,6 +291,9 @@ body{font-family:system-ui,sans-serif;background:#080808;color:#e4e4e7;display:f
 .req{color:#ef4444}
 input[type=text],input[type=date],input[type=number],textarea,select{width:100%;padding:8px 10px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;color:#f4f4f5;font-size:13px;outline:none;transition:border-color .15s;font-family:inherit}
 input:focus,textarea:focus,select:focus{border-color:#22c55e}
+input[type=date]{color-scheme:dark;cursor:pointer}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);cursor:pointer;border-radius:3px;padding:2px}
+input[type=date]::-webkit-calendar-picker-indicator:hover{filter:invert(1)}
 textarea{resize:vertical;min-height:72px}
 .chk-row{display:flex;align-items:center;gap:8px}
 .chk-row input{width:auto;accent-color:#22c55e}
@@ -445,6 +448,11 @@ function renderForm(data) {
       div.innerHTML = `<label>${f.label}</label>
         <div class="tags-wrap" id="tw-${f.name}" onclick="document.getElementById('ti-${f.name}').focus()"></div>`;
       setTimeout(() => renderTags(f.name), 0);
+    } else if (f.type === 'date') {
+      div.className = 'field';
+      const dateVal = val ? String(val).slice(0,10) : '';
+      div.innerHTML = `<label>${f.label}${f.required?'<span class="req"> *</span>':''}</label>
+        <input type="date" id="f-${f.name}" value="${dateVal}" ${f.required?'required':''}>`;
     } else if (f.type === 'image') {
       div.className = 'field';
       div.innerHTML = `<label>${f.label}</label>

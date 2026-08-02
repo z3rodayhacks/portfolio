@@ -14,7 +14,7 @@ description: One of the things I love most about community meetups is that you n
   essential in cybersecurity. A big thank you to **Ankit Jesar** and the faculty at
   CMS College of Science and Commerce for the invitation and wonderful hospitality.
   Looking forward to many more such sessions and community interactions!
-date: '2025-07-31'
+date: '2026-07-31'
 event: Guest Lecture
 location: CMS College of Commerce And Sciences
 linkedin: https://www.linkedin.com/posts/jashwanth-raghav-5a9111313_cybersecurity-darkweb-threatintelligence-ugcPost-7489552363414814721-e546/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE-SlxEBI8QC5mTQnEHy8KEGA7k2rk50iwA
