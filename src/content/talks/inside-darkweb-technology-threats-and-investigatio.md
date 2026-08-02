@@ -1,19 +1,11 @@
 ---
 title: 'Inside Darkweb : Technology , Threats and Investigations'
-description: One of the things I love most about community meetups is that you never
-  know where a simple conversation might lead. A while ago, I met **Ankit Jesar**
-  at one such meetup, and after a few discussions around cybersecurity and research,
-  he invited me to deliver a session at **CMS College of Science and Commerce, Coimbatore**.
-  I had the opportunity to speak about the Dark Web, how the Tor network works, the
-  reality behind cybercriminal operations, and how threat intelligence teams investigate
-  malicious activity. What made the session even more enjoyable was interacting with
-  students from first-year undergraduate to Master's programs, all of whom were incredibly
-  curious and asked some great questions. My biggest goal was to help them understand
-  that the Dark Web isn't just a mysterious or dangerous place it's a technology with
-  both legitimate and malicious use cases, and understanding both perspectives is
-  essential in cybersecurity. A big thank you to **Ankit Jesar** and the faculty at
-  CMS College of Science and Commerce for the invitation and wonderful hospitality.
-  Looking forward to many more such sessions and community interactions!
+description: Delivered a session at CMS College of Science and Commerce, Coimbatore,
+  on the Dark Web, the Tor network, cybercriminal operations, and threat intelligence
+  investigations. It was a great experience interacting with students from undergraduate
+  to Master's programs and helping them understand both the legitimate and malicious
+  aspects of the Dark Web. Thanks to Ankit Jesar and the faculty for the invitation
+  and warm hospitality.
 date: '2026-07-31'
 event: Guest Lecture
 location: CMS College of Commerce And Sciences
