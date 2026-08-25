@@ -6,13 +6,43 @@ import { sortByDate, formatDate } from '../lib/utils';
 const allTalks = await getCollection('talks');
 const sorted   = sortByDate(allTalks);
 
+const siteOrigin = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://gli4chskldfup3245mafdafksjdfjdfsdfsdfsrdcszd.online';
+
+const eventsSchema = sorted.map(talk => ({
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: talk.data.title,
+  startDate: talk.data.date,
+  description: talk.data.description,
+  ...(talk.data.location ? {
+    location: { '@type': 'Place', name: `${talk.data.event}${talk.data.location ? ', ' + talk.data.location : ''}` }
+  } : {
+    location: { '@type': 'VirtualLocation', name: talk.data.event }
+  }),
+  organizer: { '@type': 'Organization', name: talk.data.event },
+  performer: {
+    '@type': 'Person',
+    name: 'Jashwanth Raghav R K',
+    url: `${siteOrigin}/about`,
+    image: `${siteOrigin}/profile/photo.jpg`,
+    jobTitle: 'Cybersecurity Researcher & Security Consultant',
+  },
+  ...(talk.data.images?.[0] ? { image: `${siteOrigin}${talk.data.images[0]}` } : {}),
+  ...(talk.data.video ? { recordedIn: { '@type': 'VideoObject', contentUrl: talk.data.video } } : {}),
+}));
+
 function youtubeId(url: string): string | null {
   const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?/]+)/);
   return m ? m[1] : null;
 }
 ---
 
-<BaseLayout title="Talks - Jashwanth Raghav" description="Sessions, workshops, and presentations on cybersecurity topics.">
+<BaseLayout
+  title="Talks & Speaking — Jashwanth Raghav R K | Cybersecurity Speaker"
+  description="Jashwanth Raghav R K's conference presentations, workshops, and guest lectures on cybersecurity, malware analysis, dark web research, and network security."
+  image="/profile/photo.jpg"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(eventsSchema)} />
   <div class="py-16 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto">
 
@@ -109,7 +139,7 @@ function youtubeId(url: string): string | null {
                       >
                         <img
                           src={img}
-                          alt={`${talk.data.title} - image ${imgIndex + 1}`}
+                          alt={`Jashwanth Raghav R K presenting at ${talk.data.event} — ${talk.data.title}`}
                           loading="lazy" decoding="async"
                           class="w-full h-40 object-cover group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
                         />
