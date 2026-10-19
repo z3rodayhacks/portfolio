@@ -33,7 +33,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#050505" />
+    <meta name="theme-color" content="#1a1a1a" />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
@@ -88,7 +88,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
       ]
     })} />
   </head>
-  <body class={`min-h-screen flex flex-col bg-[#050505] text-zinc-100 ${className}`}>
+  <body class={`min-h-screen flex flex-col bg-[#1a1a1a] text-zinc-100 ${className}`}>
     <Header />
     <main class="flex-1">
       <slot />

@@ -4,6 +4,7 @@ Portfolio Admin Dashboard
 Run: python admin.py
 Open: http://localhost:8888
 """
+import asyncio
 import json, re, sys
 from pathlib import Path
 import yaml
@@ -171,6 +172,20 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 def get_types():
     return {k: {"label": v["label"], "fields": v["fields"]} for k, v in TYPES.items()}
 
+@app.post("/api/build")
+async def trigger_build():
+    proc = await asyncio.create_subprocess_exec(
+        "npm", "run", "build",
+        cwd=str(ROOT),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.STDOUT,
+    )
+    stdout, _ = await proc.communicate()
+    output = stdout.decode(errors="replace")
+    if proc.returncode == 0:
+        return {"ok": True, "output": output}
+    raise HTTPException(500, detail=output)
+
 @app.get("/api/{ctype}")
 def list_entries(ctype: str):
     if ctype not in TYPES:
@@ -320,6 +335,7 @@ textarea{resize:vertical;min-height:72px}
 .toast{position:fixed;bottom:20px;right:20px;padding:9px 16px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;font-size:13px;z-index:999;animation:toastIn .2s ease}
 .toast.ok{border-color:#22c55e;color:#22c55e}
 .toast.err{border-color:#ef4444;color:#ef4444}
+.toast.building{border-color:#facc15;color:#facc15}
 @keyframes toastIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
 .section-sep{font-size:11px;color:#3f3f46;text-transform:uppercase;letter-spacing:.08em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid #1a1a1a}
 </style>
@@ -571,6 +587,7 @@ async function saveEntry() {
   toast('Saved ✓','ok');
   closeModal();
   loadEntries();
+  triggerBuild();
 }
 
 async function deleteEntry(id) {
@@ -578,6 +595,37 @@ async function deleteEntry(id) {
   await fetch(`/api/${currentType}/${id}`,{method:'DELETE'});
   toast('Deleted','ok');
   loadEntries();
+  triggerBuild();
+}
+
+async function triggerBuild() {
+  const t = buildToast('Building dist/…');
+  try {
+    const res = await fetch('/api/build', {method:'POST'});
+    if (res.ok) {
+      t.finish('✓ Build complete — upload dist/ to Cloudflare', 'ok');
+    } else {
+      const body = await res.json().catch(()=>({detail:'unknown error'}));
+      t.finish('✗ Build failed — check terminal', 'err');
+      console.error('Build output:\n', body.detail);
+    }
+  } catch(e) {
+    t.finish('✗ Build error: ' + e.message, 'err');
+  }
+}
+
+function buildToast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast building';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  return {
+    finish(newMsg, type) {
+      el.className = `toast ${type}`;
+      el.textContent = newMsg;
+      setTimeout(() => el.remove(), 5000);
+    }
+  };
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────

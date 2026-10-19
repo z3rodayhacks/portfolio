@@ -24,7 +24,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
   <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
     <!-- Logo -->
     <a href="/" class="shrink-0 flex items-center gap-2 font-mono font-bold text-base">
-      <span class="text-zinc-500">/</span><span class="text-cyan-400">z3roday</span><span class="text-zinc-500">~</span>
+      <span class="text-zinc-500">/</span><span class="text-zinc-200">z3roday</span><span class="text-zinc-500">~</span>
     </a>
 
     <!-- Desktop Nav -->
@@ -35,7 +35,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
           aria-current={isActive(href) ? 'page' : undefined}
           class={`px-3 py-1.5 rounded text-sm transition-colors whitespace-nowrap ${
             isActive(href)
-              ? 'text-cyan-400 bg-cyan-500/8'
+              ? 'text-zinc-100 bg-zinc-800/50'
               : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
           }`}
         >
@@ -61,7 +61,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
         href="/resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded border border-cyan-500/25 text-cyan-400 hover:bg-cyan-500/8 hover:border-cyan-500/40 transition-all font-mono"
+        class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded border border-zinc-600/50 text-zinc-400 hover:bg-zinc-800 hover:border-zinc-500 hover:text-zinc-200 transition-all font-mono"
       >
         resume<span class="text-zinc-500">↗</span>
       </a>
@@ -86,7 +86,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="hidden lg:hidden border-t border-zinc-800/60 bg-[#050505]/98"
+    class="hidden lg:hidden border-t border-zinc-800/60 bg-[#1a1a1a]/98"
     aria-label="Mobile navigation"
   >
     <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-0.5">
@@ -96,7 +96,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
           aria-current={isActive(href) ? 'page' : undefined}
           class={`px-3 py-2 rounded text-sm transition-colors ${
             isActive(href)
-              ? 'text-cyan-400 bg-cyan-500/8'
+              ? 'text-zinc-100 bg-zinc-800/50'
               : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
           }`}
         >
@@ -104,7 +104,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
         </a>
       ))}
       <a href="/resume.pdf" target="_blank" rel="noopener noreferrer"
-        class="mt-1 px-3 py-2 text-sm font-mono font-semibold text-cyan-400 border border-cyan-500/25 rounded hover:bg-cyan-500/8 transition-all w-full text-center">
+        class="mt-1 px-3 py-2 text-sm font-mono font-semibold text-zinc-300 border border-zinc-600/40 rounded hover:bg-zinc-800 transition-all w-full text-center">
         resume ↗
       </a>
     </nav>
@@ -117,7 +117,7 @@ const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.st
   const updateHeader = () => {
     if (!header) return;
     const scrolled = window.scrollY > 20;
-    header.style.background = scrolled ? 'rgba(5,5,5,0.92)' : 'transparent';
+    header.style.background = scrolled ? 'rgba(26,26,26,0.92)' : 'transparent';
     header.style.backdropFilter = scrolled ? 'blur(16px)' : 'none';
     header.style.borderBottomColor = scrolled ? '#1c1c1c' : 'transparent';
   };
