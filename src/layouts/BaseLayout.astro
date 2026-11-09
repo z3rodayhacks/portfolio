@@ -87,6 +87,41 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
         "Network Security", "Incident Response"
       ]
     })} />
+    <!-- Runtime theme override (reads /theme.json written by admin panel) -->
+    <script is:inline>
+      (function () {
+        function applyTheme(t) {
+          var root = document.documentElement;
+          var body = document.body;
+          if (t.bg)      { root.style.setProperty('--color-bg', t.bg);      body.style.backgroundColor = t.bg; }
+          if (t.surface) { root.style.setProperty('--color-surface', t.surface); }
+          if (t.card)    { root.style.setProperty('--color-card', t.card); }
+          if (t.text)    { root.style.setProperty('--color-text', t.text);   body.style.color = t.text; }
+          if (t.muted)   { root.style.setProperty('--color-muted', t.muted); }
+          if (t.border)  { root.style.setProperty('--color-border', t.border); }
+          if (t.wallpaper) {
+            body.style.backgroundImage    = 'url(' + t.wallpaper + ')';
+            body.style.backgroundSize     = 'cover';
+            body.style.backgroundPosition = 'center';
+            body.style.backgroundAttachment = 'fixed';
+            body.style.backgroundRepeat   = 'no-repeat';
+            // overlay so text stays readable
+            var ov = document.getElementById('_theme_overlay');
+            if (!ov) { ov = document.createElement('div'); ov.id = '_theme_overlay'; document.body.prepend(ov); }
+            var opacity = t.wallpaperOverlay !== undefined ? t.wallpaperOverlay : 0.75;
+            ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,' + opacity + ');z-index:0;pointer-events:none;';
+          }
+        }
+        // apply cached immediately (no flash)
+        try { var c = localStorage.getItem('_pt'); if (c) applyTheme(JSON.parse(c)); } catch(e) {}
+        // fetch fresh
+        fetch('/theme.json').then(function(r){ return r.ok ? r.json() : null; }).then(function(t){
+          if (!t) return;
+          try { localStorage.setItem('_pt', JSON.stringify(t)); } catch(e) {}
+          applyTheme(t);
+        }).catch(function(){});
+      })();
+    </script>
   </head>
   <body class={`min-h-screen flex flex-col bg-[#1a1a1a] text-zinc-100 ${className}`}>
     <Header />

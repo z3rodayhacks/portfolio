@@ -156,6 +156,31 @@ def list_entries(ctype: str) -> list:
     return sorted([parse_md(f) for f in d.glob("*.md")],
                   key=lambda x: str(x.get("date", "")), reverse=True)
 
+THEME_FILE = PUBLIC_DIR / "theme.json"
+
+DEFAULT_THEME = {
+    "bg":               "#1a1a1a",
+    "surface":          "#212121",
+    "card":             "#272727",
+    "text":             "#e4e4e7",
+    "muted":            "#71717a",
+    "border":           "#383838",
+    "wallpaper":        "",
+    "wallpaperOverlay": 0.75,
+}
+
+def load_theme() -> dict:
+    if THEME_FILE.exists():
+        try:
+            return {**DEFAULT_THEME, **json.loads(THEME_FILE.read_text())}
+        except Exception:
+            pass
+    return dict(DEFAULT_THEME)
+
+def save_theme(data: dict):
+    THEME_FILE.parent.mkdir(parents=True, exist_ok=True)
+    THEME_FILE.write_text(json.dumps(data, indent=2))
+
 def h(text) -> str:
     return str(text).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"','&quot;')
 
@@ -308,6 +333,7 @@ def shell(title: str, body: str, active_type: str = "") -> str:
         f'<a href="/{k}" class="{"active" if k == active_type else ""}">{v["label"]}</a>'
         for k, v in TYPES.items()
     )
+    nav_links += f'<a href="/theme" class="{"active" if active_type == "theme" else ""}" style="margin-left:auto">Theme</a>'
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -434,6 +460,15 @@ app = FastAPI()
 @app.get("/", response_class=HTMLResponse)
 def root():
     return RedirectResponse("/projects")
+
+# Theme routes registered BEFORE /{ctype} wildcard
+@app.get("/theme", response_class=HTMLResponse)
+def _theme_get(flash: str = "", flash_type: str = "ok"):
+    return theme_page(flash, flash_type)
+
+@app.post("/theme")
+async def _theme_post(request: Request):
+    return await save_theme_route(request)
 
 @app.get("/{ctype}", response_class=HTMLResponse)
 def list_view(ctype: str, flash: str = "", flash_type: str = "ok"):
@@ -593,6 +628,224 @@ async def upload_file(folder: str, file: UploadFile = File(...)):
     out  = dest / name
     out.write_bytes(await file.read())
     return {"path": f"/{folder}/{name}"}
+
+# ── Theme ──────────────────────────────────────────────────────────────────────
+THEME_CSS = """
+.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .theme-grid { grid-template-columns: 1fr; } }
+.color-row { display: flex; align-items: center; gap: 10px; }
+.color-row input[type=color] { width: 44px; height: 36px; padding: 2px; border-radius: 6px; border: 1px solid #2a2a2a; background: #1a1a1a; cursor: pointer; flex-shrink: 0; }
+.color-row input[type=text] { flex: 1; }
+.preview-box { background: #0d0d0d; border: 1px solid #222; border-radius: 10px; padding: 20px; margin-top: 24px; }
+.preview-box h3 { font-size: 13px; color: #52525b; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px; }
+.preview-screen { border-radius: 8px; overflow: hidden; border: 1px solid #333; height: 180px; position: relative; display: flex; flex-direction: column; }
+.preview-nav { height: 36px; display: flex; align-items: center; padding: 0 14px; gap: 8px; flex-shrink: 0; border-bottom: 1px solid; }
+.preview-nav span { font-size: 11px; font-family: monospace; }
+.preview-body { flex: 1; padding: 14px; display: flex; gap: 12px; }
+.preview-card { flex: 1; border-radius: 6px; padding: 10px; border: 1px solid; }
+.preview-card p { font-size: 11px; margin-top: 6px; }
+.wallpaper-preview { width: 100%; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid #2a2a2a; display: block; margin-top: 8px; }
+.wallpaper-none { width: 100%; height: 60px; border-radius: 6px; border: 1px dashed #2a2a2a; display: flex; align-items: center; justify-content: center; color: #3f3f46; font-size: 12px; margin-top: 8px; }
+.range-row { display: flex; align-items: center; gap: 10px; }
+.range-row input[type=range] { flex: 1; accent-color: #22c55e; }
+.range-row span { font-size: 12px; color: #71717a; min-width: 32px; text-align: right; }
+.reset-link { font-size: 12px; color: #52525b; cursor: pointer; text-decoration: underline; }
+.reset-link:hover { color: #ef4444; }
+"""
+
+@app.get("/theme", response_class=HTMLResponse)
+def theme_page(flash: str = "", flash_type: str = "ok"):
+    t = load_theme()
+    flash_html = f'<div class="flash {h(flash_type)}">{h(flash)}</div>' if flash else ""
+
+    def color_field(key, label):
+        val = t.get(key, "")
+        return f"""
+<div class="field">
+  <label>{label}</label>
+  <div class="color-row">
+    <input type="color" value="{h(val)}" oninput="syncColor(this,'{key}')">
+    <input type="text"  id="c-{key}" name="{key}" value="{h(val)}" placeholder="#rrggbb"
+           oninput="syncPicker(this,'{key}')" onchange="updatePreview()">
+  </div>
+</div>"""
+
+    wp = t.get("wallpaper", "")
+    wp_preview = (f'<img class="wallpaper-preview" id="wp-preview" src="{h(wp)}">'
+                  if wp else '<div class="wallpaper-none" id="wp-preview">No wallpaper set</div>')
+    overlay_val = t.get("wallpaperOverlay", 0.75)
+
+    body = f"""
+<style>{THEME_CSS}</style>
+{flash_html}
+<div class="page-header">
+  <h1>Theme</h1>
+  <a class="reset-link" onclick="resetDefaults()">Reset to defaults</a>
+</div>
+
+<form method="post" action="/theme" enctype="multipart/form-data" class="form-card" id="theme-form">
+  <div class="theme-grid">
+    <div>
+      <div class="section-label" style="font-size:11px;color:#52525b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Colors</div>
+      {color_field("bg",      "Background")}
+      {color_field("surface", "Surface / Panels")}
+      {color_field("card",    "Cards")}
+      {color_field("text",    "Text")}
+      {color_field("muted",   "Muted text")}
+      {color_field("border",  "Borders")}
+    </div>
+    <div>
+      <div class="section-label" style="font-size:11px;color:#52525b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Wallpaper</div>
+      {wp_preview}
+      <div class="field" style="margin-top:12px">
+        <label>Upload image</label>
+        <input type="file" name="_wallpaper_file" accept="image/*" onchange="previewWallpaper(this)">
+      </div>
+      <div class="field">
+        <label>Or paste URL / path</label>
+        <input type="text" name="wallpaper" id="c-wallpaper" value="{h(wp)}" placeholder="/wallpaper.jpg or https://..."
+               oninput="document.getElementById('wp-preview').src=this.value">
+      </div>
+      <div class="field">
+        <label>Dark overlay (0 = none, 1 = full black)</label>
+        <div class="range-row">
+          <input type="range" name="wallpaperOverlay" id="overlay-range" min="0" max="1" step="0.05"
+                 value="{overlay_val}" oninput="document.getElementById('overlay-val').textContent=parseFloat(this.value).toFixed(2)">
+          <span id="overlay-val">{overlay_val:.2f}</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:4px">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="clearWallpaper()">✕ Clear wallpaper</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-box">
+    <h3>Live Preview</h3>
+    <div class="preview-screen" id="preview-screen">
+      <div class="preview-nav" id="pv-nav">
+        <span id="pv-brand">/z3roday~</span>
+        <span id="pv-link" style="margin-left:auto">About</span>
+        <span id="pv-link2">Projects</span>
+      </div>
+      <div class="preview-body" id="pv-body">
+        <div class="preview-card" id="pv-card">
+          <strong id="pv-title">Project Title</strong>
+          <p id="pv-muted">2026 · cybersecurity</p>
+        </div>
+        <div class="preview-card" id="pv-card2">
+          <strong id="pv-title2">Certificate</strong>
+          <p id="pv-muted2">EC-Council</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-green" type="submit">Save Theme</button>
+  </div>
+</form>
+
+<script>
+const DEFAULTS = {{bg:'#1a1a1a',surface:'#212121',card:'#272727',text:'#e4e4e7',muted:'#71717a',border:'#383838'}};
+
+function syncColor(picker, key) {{
+  document.getElementById('c-' + key).value = picker.value;
+  updatePreview();
+}}
+function syncPicker(input, key) {{
+  const picker = input.previousElementSibling;
+  if (/^#[0-9a-fA-F]{{6}}$/.test(input.value)) picker.value = input.value;
+  updatePreview();
+}}
+function get(key) {{
+  const el = document.getElementById('c-' + key);
+  return el ? el.value : DEFAULTS[key];
+}}
+function updatePreview() {{
+  const bg = get('bg'), surface = get('surface'), card = get('card'),
+        text = get('text'), muted = get('muted'), border = get('border');
+  const pv = document.getElementById('preview-screen');
+  pv.style.background = bg;
+  document.getElementById('pv-nav').style.background = surface;
+  document.getElementById('pv-nav').style.borderBottomColor = border;
+  document.getElementById('pv-brand').style.color = text;
+  document.getElementById('pv-link').style.color = muted;
+  document.getElementById('pv-link2').style.color = muted;
+  ['pv-card','pv-card2'].forEach(id => {{
+    const el = document.getElementById(id);
+    el.style.background = card;
+    el.style.borderColor = border;
+  }});
+  ['pv-title','pv-title2'].forEach(id => document.getElementById(id).style.color = text);
+  ['pv-muted','pv-muted2'].forEach(id => document.getElementById(id).style.color = muted);
+}}
+function resetDefaults() {{
+  Object.entries(DEFAULTS).forEach(([k,v]) => {{
+    const inp = document.getElementById('c-' + k);
+    if (inp) {{ inp.value = v; inp.previousElementSibling.value = v; }}
+  }});
+  document.getElementById('c-wallpaper').value = '';
+  document.getElementById('overlay-range').value = 0.75;
+  document.getElementById('overlay-val').textContent = '0.75';
+  updatePreview();
+}}
+function clearWallpaper() {{
+  document.getElementById('c-wallpaper').value = '';
+  const prev = document.getElementById('wp-preview');
+  prev.outerHTML = '<div class="wallpaper-none" id="wp-preview">No wallpaper set</div>';
+}}
+function previewWallpaper(input) {{
+  const file = input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const prev = document.getElementById('wp-preview');
+  if (prev.tagName === 'IMG') {{
+    prev.src = url;
+  }} else {{
+    const img = document.createElement('img');
+    img.className = 'wallpaper-preview'; img.id = 'wp-preview'; img.src = url;
+    prev.replaceWith(img);
+  }}
+}}
+updatePreview();
+</script>"""
+
+    return shell("Theme", body, active_type="theme")
+
+@app.post("/theme")
+async def save_theme_route(request: Request):
+    form = await request.form()
+    form_dict = dict(form)
+
+    theme = {
+        "bg":               form_dict.get("bg", DEFAULT_THEME["bg"]),
+        "surface":          form_dict.get("surface", DEFAULT_THEME["surface"]),
+        "card":             form_dict.get("card", DEFAULT_THEME["card"]),
+        "text":             form_dict.get("text", DEFAULT_THEME["text"]),
+        "muted":            form_dict.get("muted", DEFAULT_THEME["muted"]),
+        "border":           form_dict.get("border", DEFAULT_THEME["border"]),
+        "wallpaper":        form_dict.get("wallpaper", ""),
+        "wallpaperOverlay": float(form_dict.get("wallpaperOverlay", 0.75)),
+    }
+
+    # handle wallpaper file upload
+    upload = form.getlist("_wallpaper_file")
+    if upload:
+        f = upload[0]
+        if hasattr(f, "filename") and f.filename:
+            dest = PUBLIC_DIR / "wallpapers"
+            dest.mkdir(parents=True, exist_ok=True)
+            fname = Path(f.filename).name
+            (dest / fname).write_bytes(await f.read())
+            theme["wallpaper"] = f"/wallpapers/{fname}"
+
+    # clear wallpaper if path is empty
+    if not theme["wallpaper"].strip():
+        theme["wallpaper"] = ""
+
+    save_theme(theme)
+    return RedirectResponse("/theme?flash=Theme+saved&flash_type=ok", status_code=303)
 
 if __name__ == "__main__":
     print("\n  Portfolio Admin → http://localhost:8888\n")
