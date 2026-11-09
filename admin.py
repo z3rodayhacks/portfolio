@@ -159,6 +159,83 @@ def list_entries(ctype: str) -> list:
 def h(text) -> str:
     return str(text).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"','&quot;')
 
+# ── Timeline sync ──────────────────────────────────────────────────────────────
+TIMELINE_DIR = CONTENT_DIR / "timeline"
+
+def timeline_path(ctype: str, eid: str, date: str) -> Path:
+    """Deterministic timeline filename: sync-{ctype}-{eid}.md"""
+    return TIMELINE_DIR / f"sync-{ctype}-{eid}.md"
+
+def build_timeline_entry(ctype: str, eid: str, data: dict) -> dict | None:
+    """Return timeline frontmatter dict for a given entry, or None if not syncable."""
+    title = data.get("title", eid)
+
+    if ctype == "competitions":
+        date = str(data.get("date", ""))
+        if not date:
+            return None
+        result = data.get("result", "")
+        event  = data.get("event", "")
+        prefix = f"{result} — " if result else ""
+        desc   = data.get("description", "") or f"{result} at {event}." if result and event else f"Competed in {event or title}."
+        return {
+            "title":        f"{prefix}{title}",
+            "date":         date,
+            "type":         "achievement",
+            "organization": data.get("organizer", event) or event,
+            "location":     data.get("location", ""),
+            "description":  desc,
+            "tags":         data.get("tags", []),
+        }
+
+    if ctype == "experience":
+        date = str(data.get("startDate", ""))
+        if not date:
+            return None
+        company = data.get("company", "")
+        desc    = data.get("description", "") or f"{title} at {company}."
+        return {
+            "title":        f"{title} — {company}",
+            "date":         date,
+            "type":         "work",
+            "organization": company,
+            "location":     data.get("location", ""),
+            "description":  desc,
+            "tags":         data.get("tags", []),
+        }
+
+    if ctype == "certificates":
+        date = str(data.get("date", ""))
+        if not date:
+            return None
+        issuer = data.get("issuer", "")
+        desc   = data.get("description", "") or f"Completed {title}" + (f" by {issuer}." if issuer else ".")
+        return {
+            "title":        f"Certified — {title}" + (f" ({issuer})" if issuer else ""),
+            "date":         date,
+            "type":         "achievement",
+            "organization": issuer,
+            "description":  desc,
+            "tags":         data.get("tags", []),
+        }
+
+    return None
+
+def sync_timeline(ctype: str, eid: str, data: dict):
+    """Write or overwrite the synced timeline entry for this content item."""
+    entry = build_timeline_entry(ctype, eid, data)
+    if entry is None:
+        return
+    TIMELINE_DIR.mkdir(parents=True, exist_ok=True)
+    p = timeline_path(ctype, eid, entry["date"])
+    write_md(p, dict(entry))
+
+def unsync_timeline(ctype: str, eid: str):
+    """Remove the synced timeline entry when the source entry is deleted."""
+    p = timeline_path(ctype, eid, "")
+    if p.exists():
+        p.unlink()
+
 # ── HTML shell ─────────────────────────────────────────────────────────────────
 CSS = """
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -447,6 +524,7 @@ async def create_entry(ctype: str, request: Request):
         p = d / f"{slug}-{i}.md"
         i += 1
     write_md(p, data)
+    sync_timeline(ctype, p.stem, dict(data))
     return RedirectResponse(f"/{ctype}?flash=Created+{p.stem}&flash_type=ok", status_code=303)
 
 @app.get("/{ctype}/{eid}/edit", response_class=HTMLResponse)
@@ -494,6 +572,7 @@ async def update_entry(ctype: str, eid: str, request: Request):
     data["_body"] = form_dict.get("_body", "")
     await handle_image_uploads(ctype, cfg, form, data)
     write_md(p, data)
+    sync_timeline(ctype, eid, dict(data))
     return RedirectResponse(f"/{ctype}?flash=Saved+{eid}&flash_type=ok", status_code=303)
 
 @app.post("/{ctype}/{eid}/delete")
@@ -503,6 +582,7 @@ def delete_entry(ctype: str, eid: str):
     p = content_dir(ctype) / f"{eid}.md"
     if p.exists():
         p.unlink()
+    unsync_timeline(ctype, eid)
     return RedirectResponse(f"/{ctype}?flash=Deleted+{eid}&flash_type=ok", status_code=303)
 
 @app.post("/upload/{folder:path}")
