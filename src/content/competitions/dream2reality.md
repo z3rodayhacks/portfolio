@@ -14,10 +14,12 @@ location: Sri Ramakrishna Engineering College
 result: Runner
 team: 0XZ3RODAY
 teamSize: 4
+project: Onion Monitoring Toolkit
 linkedin: https://lnkd.in/p/g-jU5Cmn
+thumbnail: /images/competitions/dream2.jpg.jpg
 tags:
 - darkweb
-featured: false
+featured: true
 ---
 
 
