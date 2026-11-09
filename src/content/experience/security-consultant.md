@@ -3,6 +3,7 @@ title: Security Consultant
 company: Techguard Labs Foundation
 location: Coimbatore
 startDate: '2026-05-10'
+endDate: '2026-10-31'
 current: true
 description: As a Security Consultant at TechGuard Labs, I conduct penetration testing,
   security assessments, vulnerability research, and threat analysis across enterprise
