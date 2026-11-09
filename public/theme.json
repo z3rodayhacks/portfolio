@@ -1,0 +1,10 @@
+{
+  "bg": "#19191F",
+  "surface": "#24242C",
+  "card": "#111116",
+  "text": "#E8E6E3",
+  "muted": "#96949E",
+  "border": "#35333E",
+  "wallpaper": "/wallpapers/sitewall.jpg",
+  "wallpaperOverlay": 0.7
+}
